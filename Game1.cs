@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using ____.GameStates;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
@@ -8,6 +9,8 @@ public class Game1 : Game
 {
     private GraphicsDeviceManager _graphics;
     private SpriteBatch _spriteBatch;
+    private GameState currentGameState;
+    private Color bgColor = Color.CornflowerBlue;
 
     public Game1()
     {
@@ -27,6 +30,9 @@ public class Game1 : Game
     {
         _spriteBatch = new SpriteBatch(GraphicsDevice);
 
+        currentGameState = new MenuState(this, GraphicsDevice, Content);
+        currentGameState.LoadContent();
+
         // TODO: use this.Content to load your game content here
     }
 
@@ -35,6 +41,8 @@ public class Game1 : Game
         if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
             Exit();
 
+        currentGameState.Update(gameTime);
+
         // TODO: Add your update logic here
 
         base.Update(gameTime);
@@ -42,10 +50,17 @@ public class Game1 : Game
 
     protected override void Draw(GameTime gameTime)
     {
-        GraphicsDevice.Clear(Color.CornflowerBlue);
+        GraphicsDevice.Clear(bgColor);
 
         // TODO: Add your drawing code here
+        
+        currentGameState.Draw(gameTime, _spriteBatch);
 
         base.Draw(gameTime);
+    }
+
+    public void SetBGColor(Color color)
+    {
+        bgColor = color;
     }
 }

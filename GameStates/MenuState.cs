@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ____.GameState
+namespace ____.GameStates
 {
-    public class GameStateManager
+    public class MenuState : GameState
     {
         
     }

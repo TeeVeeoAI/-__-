@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ___.GameState
+namespace ____.GameStates
 {
-    public abstract class GameState
+    public class GamePlayState : GameState
     {
         
     }
