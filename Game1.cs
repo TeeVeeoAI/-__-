@@ -11,12 +11,18 @@ public class Game1 : Game
     private SpriteBatch _spriteBatch;
     private GameState currentGameState;
     private Color bgColor = Color.CornflowerBlue;
+    public Point screenSize = new Point(1920, 1080);
 
     public Game1()
     {
         _graphics = new GraphicsDeviceManager(this);
         Content.RootDirectory = "Content";
         IsMouseVisible = true;
+        _graphics.PreferredBackBufferWidth = screenSize.X;
+        _graphics.PreferredBackBufferHeight = screenSize.Y;
+        _graphics.SynchronizeWithVerticalRetrace = false; //VSync
+        IsFixedTimeStep = false; //Uncapped FPS
+        _graphics.ApplyChanges();
     }
 
     protected override void Initialize()
@@ -53,7 +59,7 @@ public class Game1 : Game
         GraphicsDevice.Clear(bgColor);
 
         // TODO: Add your drawing code here
-        
+
         currentGameState.Draw(gameTime, _spriteBatch);
 
         base.Draw(gameTime);

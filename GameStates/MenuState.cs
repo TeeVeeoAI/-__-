@@ -25,6 +25,7 @@ namespace ____.GameStates
                 new("Exit", new (100, 290, 200, 50))
             };
             selectedIndex = 0;
+            menuItems[selectedIndex].IsSelected = true;
         }
         public override void LoadContent()
         {
@@ -36,47 +37,40 @@ namespace ____.GameStates
             
             if (InputSystem.IsKeyPressed(Keys.Down))
             {
+                menuItems[selectedIndex].IsSelected = false;
                 selectedIndex = (selectedIndex + 1) % menuItems.Count;
+                menuItems[selectedIndex].IsSelected = true;
             }
             else if (InputSystem.IsKeyPressed(Keys.Up))
             {
+                menuItems[selectedIndex].IsSelected = false;
                 selectedIndex = (selectedIndex - 1 + menuItems.Count) % menuItems.Count;
-            }
-            else if (InputSystem.IsKeyPressed(Keys.Enter))
-            {
-                switch (selectedIndex)
-                {
-                    case 0:
-                        game1.ChangeGameState(new GamePlayState(game1, graphicsDevice, contentManager));
-                        break;
-                    case 1:
-                        game1.ChangeGameState(new SettingsState(game1, graphicsDevice, contentManager));
-                        break;
-                    case 2:
-                        game1.Exit();
-                        break;
-                }
+                menuItems[selectedIndex].IsSelected = true;
             }
             foreach (var item in menuItems)
             {
-                if (InputSystem.IsLeftPressed() && item.Bounds.Contains(InputSystem.GetMousePosition()))
+                if (item.IsSelected)
                 {
-                    selectedIndex = menuItems.IndexOf(item);
-                    if (InputSystem.IsLeftPressed())
-                    {
-                        switch (selectedIndex)
-                        {
-                            case 0:
-                                game1.ChangeGameState(new GamePlayState(game1, graphicsDevice, contentManager));
-                                break;
-                            case 1:
-                                game1.ChangeGameState(new SettingsState(game1, graphicsDevice, contentManager));
-                                break;
-                            case 2:
-                                game1.Exit();
-                                break;
-                        }
+                    if ((InputSystem.IsLeftPressed() && item.Bounds.Contains(InputSystem.GetMousePosition())) || InputSystem.IsKeyPressed(Keys.Enter)){
+                        selectedIndex = menuItems.IndexOf(item);
                     }
+                    else
+                    {
+                        continue;
+                    }
+                    switch (selectedIndex)
+                    {
+                        case 0:
+                            game1.ChangeGameState(new GamePlayState(game1, graphicsDevice, contentManager));
+                            break;
+                        case 1:
+                            game1.ChangeGameState(new SettingsState(game1, graphicsDevice, contentManager));
+                            break;
+                        case 2:
+                            game1.Exit();
+                            break;
+                    }
+                    break;
                 }
             }
         }
@@ -85,6 +79,10 @@ namespace ____.GameStates
             base.Draw(gameTime, spriteBatch);
             spriteBatch.Begin();
             spriteBatch.DrawString(font, "Main Menu", new Vector2(100, 100), Color.White);
+            foreach (var item in menuItems)
+            {
+                item.Draw(spriteBatch, font);
+            }
             spriteBatch.End();
         }
     }
