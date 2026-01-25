@@ -74,7 +74,7 @@ namespace ____.Entities.Player
             
             skills = new PlayerSkills
             {
-                CanDash = false,
+                CanDash = true,
                 HasFireball = false
             };
         }
@@ -119,7 +119,21 @@ namespace ____.Entities.Player
             if (inputDirection != Vector2.Zero)
             {
                 inputDirection.Normalize();
-                velocity = inputDirection * speed;
+                if (InputSystem.IsKeyDown(Keys.LeftShift))
+                {
+                    velocity = inputDirection * attributes.MovementSpeed.RunSpeed; // Running speed
+                    currentState = PlayerState.Running;
+                }
+                else if (InputSystem.IsKeyDown(Keys.Space) && skills.CanDash)
+                {
+                    velocity = inputDirection * attributes.MovementSpeed.DashSpeed; // Dashing speed
+                    currentState = PlayerState.Dashing;
+                }
+                else
+                {
+                    velocity = inputDirection * attributes.MovementSpeed.WalkSpeed; // Walking speed
+                    currentState = PlayerState.Walking;
+                }
                 currentState = PlayerState.Walking;
             }
             else
@@ -207,6 +221,7 @@ namespace ____.Entities.Player
         Idle,
         Walking,
         Running,
+        Dashing,
         Jumping,
         Attacking,
         Dead
