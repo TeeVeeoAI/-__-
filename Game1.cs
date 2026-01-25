@@ -63,4 +63,10 @@ public class Game1 : Game
     {
         bgColor = color;
     }
+
+    public void ChangeGameState(GameState newState)
+    {
+        currentGameState = newState;
+        currentGameState.LoadContent();
+    }
 }

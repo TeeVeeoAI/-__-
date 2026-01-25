@@ -18,7 +18,7 @@ namespace ____.GameStates
         protected SpriteFont font;
         protected Texture2D pixel;
         protected bool starting = true;
-        protected Color BGcolor;
+        public Color BGcolor;
 
         public GameState(Game1 game, GraphicsDevice graphics, ContentManager content)
         {
@@ -32,16 +32,24 @@ namespace ____.GameStates
 
         public virtual void LoadContent()
         {
-            game1.SetBGColor(BGcolor);
+            
         }
         public virtual void Update(GameTime gameTime)
         {
             InputSystem.Update();
+            if (starting)
+            {
+                starting = false;
+                return; // Skip the first update to avoid input issues
+            }
             if (InputSystem.IsKeyPressed(Keys.Escape))
             {
                 game1.Exit();
             }
         }
-        public abstract void Draw(GameTime gameTime, SpriteBatch spriteBatch);
+        public virtual void Draw(GameTime gameTime, SpriteBatch spriteBatch)
+        {
+            game1.SetBGColor(BGcolor);           
+        }
     }
 }
