@@ -18,11 +18,13 @@ namespace ____.Entities.Player
         // Calculated properties based on stats and scaling config
         public int MaxHealth => scaling.BaseHealth + (Stamina * scaling.HealthPerStamina);
         public int MaxMana => scaling.BaseMana + (Intelligence * scaling.ManaPerIntelligence);
+        public float MaxStaminaBar => scaling.BaseStaminaBar + (Stamina * scaling.StaminaBarPerStamina);
         public float BaseDamage => scaling.BaseDamage + (Strength * scaling.DamagePerStrength);
         public float CriticalChance => scaling.BaseCritChance + (Agility * scaling.CritChancePerAgility);
         public float DamageReduction => Math.Min(Stamina * scaling.DamageReductionPerStamina, scaling.MaxDamageReduction);
         public float HealthRegenPerSecond => Stamina * scaling.HealthRegenPerStamina;
         public float ManaRegenPerSecond => Intelligence * scaling.ManaRegenPerIntelligence;
+        public float StaminaBarRegenPerSecond => Stamina * scaling.StaminaBarRegenPerStamina;
         
         public PlayerStats(StatScaling statScaling)
         {

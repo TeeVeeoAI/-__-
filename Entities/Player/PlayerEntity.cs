@@ -22,8 +22,10 @@ namespace ____.Entities.Player
         // Current values (these change during gameplay)
         private int currentHealth;
         private int currentMana;
+        private float currentStaminaBar;
         private float healthRegenTimer = 0f;
         private float manaRegenTimer = 0f;
+        private float staminaBarRegenTimer = 0f;
 
         
         public int CurrentHealth 
@@ -36,6 +38,12 @@ namespace ____.Entities.Player
         {
             get => currentMana;
             set => currentMana = Math.Clamp(value, 0, stats.MaxMana);
+        }
+
+        public float StaminaBar
+        {
+            get => currentStaminaBar;
+            set => currentStaminaBar = Math.Clamp(value, 0f, stats.MaxStaminaBar);
         }
         
         private PlayerInventory inventory = new PlayerInventory();
@@ -56,6 +64,7 @@ namespace ____.Entities.Player
             // Set current health/mana to max
             currentHealth = stats.MaxHealth;
             currentMana = stats.MaxMana;
+            currentStaminaBar = stats.MaxStaminaBar;
             
             // Calculate speed based on stats and scaling
             speed = scaling.BaseSpeed * (1 + stats.Agility * scaling.SpeedPerAgility);
@@ -75,7 +84,11 @@ namespace ____.Entities.Player
             skills = new PlayerSkills
             {
                 CanDash = true,
-                HasFireball = false
+                DashColldown = 3.5f,
+                activeDash = false,
+                activeDashTimer = 0f,
+                HasFireball = false,
+                FireballCooldown = 5.0f
             };
         }
 
@@ -83,6 +96,7 @@ namespace ____.Entities.Player
         {
             HandleMovement(gameTime);
             HandleRegeneration(gameTime);
+            HandleCooldown(gameTime);
         }
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
@@ -123,18 +137,26 @@ namespace ____.Entities.Player
                 {
                     velocity = inputDirection * attributes.MovementSpeed.RunSpeed; // Running speed
                     currentState = PlayerState.Running;
+                    currentStaminaBar -= 10f * (float)gameTime.ElapsedGameTime.TotalSeconds;
                 }
-                else if (InputSystem.IsKeyDown(Keys.Space) && skills.CanDash)
+                else if ((InputSystem.IsKeyDown(Keys.Space) && skills.CanDash) || skills.activeDash)
                 {
                     velocity = inputDirection * attributes.MovementSpeed.DashSpeed; // Dashing speed
                     currentState = PlayerState.Dashing;
+                    currentStaminaBar -= 30f; // Instant stamina cost
+                    skills.CanDash = false;
+                    skills.DashColldown = 3.5f; // Reset dash cooldown
+                    if (!skills.activeDash)
+                    {
+                        skills.activeDash = true;
+                        skills.activeDashTimer = 0.5f; // Dash lasts for 0.5 seconds
+                    }
                 }
                 else
                 {
                     velocity = inputDirection * attributes.MovementSpeed.WalkSpeed; // Walking speed
                     currentState = PlayerState.Walking;
                 }
-                currentState = PlayerState.Walking;
             }
             else
             {
@@ -168,6 +190,42 @@ namespace ____.Entities.Player
             {
                 CurrentMana += (int)stats.ManaRegenPerSecond;
                 manaRegenTimer = 0f;
+            }
+
+            // Stamina bar regeneration
+            staminaBarRegenTimer += deltaTime;
+            if (staminaBarRegenTimer >= 1f) // Regen per second
+            {
+                StaminaBar += stats.StaminaBarRegenPerSecond;
+                staminaBarRegenTimer = 0f;
+            }
+        }
+
+        private void HandleCooldown(GameTime gameTime)
+        {
+            if (!skills.CanDash)
+            {
+                skills.DashColldown -= (float)gameTime.ElapsedGameTime.TotalSeconds;
+                if (skills.DashColldown <= 0f)
+                {
+                    skills.CanDash = true;
+                }
+            }
+            if (!skills.HasFireball)
+            {
+                skills.FireballCooldown -= (float)gameTime.ElapsedGameTime.TotalSeconds;
+                if (skills.FireballCooldown <= 0f)
+                {
+                    skills.HasFireball = true;
+                }
+            }
+            if (skills.activeDash)
+            {
+                skills.activeDashTimer -= (float)gameTime.ElapsedGameTime.TotalSeconds;
+                if (skills.activeDashTimer <= 0f)
+                {
+                    skills.activeDash = false;
+                }
             }
         }
         
@@ -252,7 +310,11 @@ namespace ____.Entities.Player
     public struct PlayerSkills
     {
         public bool CanDash;
+        public float DashColldown;
+        public bool activeDash;
+        public float activeDashTimer;
         public bool HasFireball;
+        public float FireballCooldown;
     }
 
     public enum MovementKeys

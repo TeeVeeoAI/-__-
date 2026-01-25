@@ -1,3 +1,5 @@
+using System;
+
 namespace ____.Entities.Player
 {
     public class StatScaling
@@ -15,10 +17,15 @@ namespace ____.Entities.Player
         public float CritChancePerAgility { get; set; } = 0.01f; // 1% per point
         public float DamageReductionPerStamina { get; set; } = 0.005f; // 0.5% per point
         public float MaxDamageReduction { get; set; } = 0.75f; // 75% max
+
+        // Stamina bar scaling
+        public float BaseStaminaBar { get; set; } = 100f;
+        public float StaminaBarPerStamina { get; set; } = 20f;
         
         // Regeneration scaling
         public float HealthRegenPerStamina { get; set; } = 0.1f;
         public float ManaRegenPerIntelligence { get; set; } = 0.2f;
+        public float StaminaBarRegenPerStamina { get; set; } = 0.35f;
         
         // Movement scaling
         public float BaseSpeed { get; set; } = 100f;
