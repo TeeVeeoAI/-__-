@@ -53,7 +53,10 @@ namespace ____.GameStates
         public void DrawUI(GameTime gameTime, SpriteBatch spriteBatch)
         {
             spriteBatch.Begin();
-            fpsCounter.Draw(spriteBatch, font, new Vector2(10, 10), Color.Yellow);
+
+            player.DrawUI(spriteBatch, font, new Vector2(10, 50), Color.White);
+            fpsCounter.Draw(spriteBatch, font, new Vector2(10, 10), Color.White);
+
             spriteBatch.End();
         }
     }

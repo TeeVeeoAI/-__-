@@ -14,11 +14,11 @@ namespace ____.Entities.Player
     {
         private PlayerState currentState = PlayerState.Idle;
         private PlayerDirection currentDirection = PlayerDirection.Down;
-        
+
         // Separate stats and scaling
         private PlayerStats stats;
         private StatScaling scaling;
-        
+
         // Current values (these change during gameplay)
         private int currentHealth;
         private int currentMana;
@@ -27,13 +27,13 @@ namespace ____.Entities.Player
         private float manaRegenTimer = 0f;
         private float staminaBarRegenTimer = 0f;
 
-        
-        public int CurrentHealth 
-        { 
+
+        public int CurrentHealth
+        {
             get => currentHealth;
             set => currentHealth = Math.Clamp(value, 0, stats.MaxHealth);
         }
-        
+
         public int CurrentMana
         {
             get => currentMana;
@@ -45,7 +45,7 @@ namespace ____.Entities.Player
             get => currentStaminaBar;
             set => currentStaminaBar = Math.Clamp(value, 0f, stats.MaxStaminaBar);
         }
-        
+
         private PlayerInventory inventory = new PlayerInventory();
         private PlayerAttributes attributes;
         private PlayerSkills skills;
@@ -57,15 +57,15 @@ namespace ____.Entities.Player
         {
             // Initialize scaling config 
             scaling = statScaling ?? new StatScaling();
-            
+
             // Initialize stats with scaling reference
             stats = new PlayerStats(scaling);
-            
+
             // Set current health/mana to max
             currentHealth = stats.MaxHealth;
             currentMana = stats.MaxMana;
             currentStaminaBar = stats.MaxStaminaBar;
-            
+
             // Calculate speed based on stats and scaling
             speed = scaling.BaseSpeed * (1 + stats.Agility * scaling.SpeedPerAgility);
 
@@ -80,7 +80,7 @@ namespace ____.Entities.Player
                 AttackSpeed = scaling.BaseAttackSpeed * (1 + stats.Agility * scaling.AttackSpeedPerAgility),
                 Defense = scaling.BaseDefense + (stats.Stamina * scaling.DefensePerStamina)
             };
-            
+
             skills = new PlayerSkills
             {
                 CanDash = true,
@@ -104,7 +104,30 @@ namespace ____.Entities.Player
             base.Draw(gameTime, spriteBatch);
             // Additional player-specific drawing (e.g., animations) can go here
         }
-        
+
+        public void DrawUI(SpriteBatch spriteBatch, SpriteFont font, Vector2 position, Color color)
+        {
+            string status = $"HP: {CurrentHealth}/{stats.MaxHealth}  " +
+                            $"Mana: {CurrentMana}/{stats.MaxMana}  " +
+                            $"Stamina: {StaminaBar}/{stats.MaxStaminaBar}  " +
+                            $"State: {currentState}  " +
+                            $"Direction: {currentDirection}  " + 
+                            $"Level: {stats.Level}  " +
+                            $"XP: {stats.Experience}/{stats.ExperienceToNextLevel}  " + 
+                            $"Speed: {velocity.Length()}";
+
+            spriteBatch.DrawString(font, status, position, color);
+            spriteBatch.Draw(texture, new Rectangle((int)position.X, (int)position.Y + 15, 110, 50), Color.Black); // Background bar
+
+            spriteBatch.Draw(texture, new Rectangle((int)position.X + 5, (int)position.Y + 20, 100, 10), Color.DarkRed);
+            spriteBatch.Draw(texture, new Rectangle((int)position.X + 5, (int)position.Y + 35, 100, 10), Color.DarkGoldenrod);
+            spriteBatch.Draw(texture, new Rectangle((int)position.X + 5, (int)position.Y + 50, 100, 10), Color.DarkBlue);
+
+            spriteBatch.Draw(texture, new Rectangle((int)position.X + 5, (int)position.Y + 20, (int)(100 * (CurrentHealth / (float)stats.MaxHealth)), 10), Color.Red);
+            spriteBatch.Draw(texture, new Rectangle((int)position.X + 5, (int)position.Y + 35, (int)(100 * (StaminaBar / stats.MaxStaminaBar)), 10), Color.Yellow);
+            spriteBatch.Draw(texture, new Rectangle((int)position.X + 5, (int)position.Y + 50, (int)(100 * (CurrentMana / (float)stats.MaxMana)), 10), Color.Blue);
+        }
+
         private void HandleMovement(GameTime gameTime)
         {
             Vector2 inputDirection = Vector2.Zero;
@@ -133,21 +156,26 @@ namespace ____.Entities.Player
             if (inputDirection != Vector2.Zero)
             {
                 inputDirection.Normalize();
-                if (InputSystem.IsKeyDown(Keys.LeftShift))
+                if (InputSystem.IsKeyDown(Keys.LeftShift) && currentStaminaBar >= 0f)
                 {
-                    velocity = inputDirection * attributes.MovementSpeed.RunSpeed; // Running speed
+                    velocity += (inputDirection * attributes.MovementSpeed.RunSpeed)/1000; // Running speed
+                    if (velocity.Y >= inputDirection.Y * attributes.MovementSpeed.RunSpeed && velocity.X >= inputDirection.X * attributes.MovementSpeed.RunSpeed)
+                        velocity = inputDirection * attributes.MovementSpeed.RunSpeed;
+
                     currentState = PlayerState.Running;
                     currentStaminaBar -= 10f * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                    if (currentStaminaBar < 0f)
+                        currentStaminaBar = 0f;
                 }
-                else if ((InputSystem.IsKeyDown(Keys.Space) && skills.CanDash) || skills.activeDash)
+                else if (((InputSystem.IsKeyDown(Keys.Space) && skills.CanDash) || skills.activeDash) && currentStaminaBar >= 30f)
                 {
                     velocity = inputDirection * attributes.MovementSpeed.DashSpeed; // Dashing speed
                     currentState = PlayerState.Dashing;
-                    currentStaminaBar -= 30f; // Instant stamina cost
                     skills.CanDash = false;
                     skills.DashColldown = 3.5f; // Reset dash cooldown
                     if (!skills.activeDash)
                     {
+                        currentStaminaBar -= 30f; // Instant stamina cost if dash initiated
                         skills.activeDash = true;
                         skills.activeDashTimer = 0.5f; // Dash lasts for 0.5 seconds
                     }
@@ -171,11 +199,11 @@ namespace ____.Entities.Player
             position += velocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
             hitbox.Location = position.ToPoint();
         }
-        
+
         private void HandleRegeneration(GameTime gameTime)
         {
             float deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
-            
+
             // Health regeneration
             healthRegenTimer += deltaTime;
             if (healthRegenTimer >= 1f) // Regen per second
@@ -183,7 +211,7 @@ namespace ____.Entities.Player
                 CurrentHealth += (int)stats.HealthRegenPerSecond;
                 healthRegenTimer = 0f;
             }
-            
+
             // Mana regeneration
             manaRegenTimer += deltaTime;
             if (manaRegenTimer >= 1f) // Regen per second
@@ -228,46 +256,46 @@ namespace ____.Entities.Player
                 }
             }
         }
-        
+
         public void TakeDamage(int damage)
         {
             // Apply damage reduction
             float actualDamage = damage * (1 - stats.DamageReduction);
             actualDamage -= attributes.Defense;
             actualDamage = Math.Max(1, actualDamage); // Minimum 1 damage
-            
+
             CurrentHealth -= (int)actualDamage;
-            
+
             if (CurrentHealth <= 0)
             {
                 OnDeath();
             }
         }
-        
+
         public void Heal(int amount)
         {
             CurrentHealth += amount;
         }
-        
+
         public int CalculateDamage()
         {
             float damage = stats.BaseDamage;
-            
+
             // Check for critical hit
             if (new Random().NextDouble() < stats.CriticalChance)
             {
                 damage *= 2f; // Critical hit doubles damage
             }
-            
+
             return (int)damage;
         }
-        
+
         private void OnDeath()
         {
             // Handle player death
             currentState = PlayerState.Dead;
         }
-        
+
         // Public accessors for UI/debugging
         public PlayerStats GetStats() => stats;
         public PlayerAttributes GetAttributes() => attributes;
