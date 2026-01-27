@@ -41,7 +41,7 @@ namespace ____.Entities
             this.hp = hp;
             this.color = color ?? Color.White;
             this.velocity = Vector2.Zero;
-            this.friction = 0.96f;
+            this.friction = 0.999f;
         }
 
         public virtual void Update(GameTime gameTime) { }

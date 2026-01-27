@@ -111,21 +111,23 @@ namespace ____.Entities.Player
                             $"Mana: {CurrentMana}/{stats.MaxMana}  " +
                             $"Stamina: {StaminaBar}/{stats.MaxStaminaBar}  " +
                             $"State: {currentState}  " +
-                            $"Direction: {currentDirection}  " + 
+                            $"Direction: {currentDirection}  " +
                             $"Level: {stats.Level}  " +
-                            $"XP: {stats.Experience}/{stats.ExperienceToNextLevel}  " + 
+                            $"XP: {stats.Experience}/{stats.ExperienceToNextLevel}  " +
                             $"Speed: {velocity.Length()}";
 
+            int separate = 25;
+
             spriteBatch.DrawString(font, status, position, color);
-            spriteBatch.Draw(texture, new Rectangle((int)position.X, (int)position.Y + 15, 110, 50), Color.Black); // Background bar
+            spriteBatch.Draw(texture, new Rectangle((int)position.X, (int)position.Y + separate, 104, 38), Color.Black); // Background bar
 
-            spriteBatch.Draw(texture, new Rectangle((int)position.X + 5, (int)position.Y + 20, 100, 10), Color.DarkRed);
-            spriteBatch.Draw(texture, new Rectangle((int)position.X + 5, (int)position.Y + 35, 100, 10), Color.DarkGoldenrod);
-            spriteBatch.Draw(texture, new Rectangle((int)position.X + 5, (int)position.Y + 50, 100, 10), Color.DarkBlue);
+            spriteBatch.Draw(texture, new Rectangle((int)position.X + 2, (int)position.Y + 2 + separate, 100, 10), Color.DarkRed);
+            spriteBatch.Draw(texture, new Rectangle((int)position.X + 2, (int)position.Y + 14 + separate, 100, 10), Color.DarkGoldenrod);
+            spriteBatch.Draw(texture, new Rectangle((int)position.X + 2, (int)position.Y + 26 + separate, 100, 10), Color.DarkBlue);
 
-            spriteBatch.Draw(texture, new Rectangle((int)position.X + 5, (int)position.Y + 20, (int)(100 * (CurrentHealth / (float)stats.MaxHealth)), 10), Color.Red);
-            spriteBatch.Draw(texture, new Rectangle((int)position.X + 5, (int)position.Y + 35, (int)(100 * (StaminaBar / stats.MaxStaminaBar)), 10), Color.Yellow);
-            spriteBatch.Draw(texture, new Rectangle((int)position.X + 5, (int)position.Y + 50, (int)(100 * (CurrentMana / (float)stats.MaxMana)), 10), Color.Blue);
+            spriteBatch.Draw(texture, new Rectangle((int)position.X + 2, (int)position.Y + 2 + separate, (int)(100 * (CurrentHealth / (float)stats.MaxHealth)), 10), Color.Red);
+            spriteBatch.Draw(texture, new Rectangle((int)position.X + 2, (int)position.Y + 14 + separate, (int)(100 * (StaminaBar / stats.MaxStaminaBar)), 10), Color.Yellow);
+            spriteBatch.Draw(texture, new Rectangle((int)position.X + 2, (int)position.Y + 26 + separate, (int)(100 * (CurrentMana / (float)stats.MaxMana)), 10), Color.Blue);
         }
 
         private void HandleMovement(GameTime gameTime)
@@ -158,9 +160,7 @@ namespace ____.Entities.Player
                 inputDirection.Normalize();
                 if (InputSystem.IsKeyDown(Keys.LeftShift) && currentStaminaBar >= 0f)
                 {
-                    velocity += (inputDirection * attributes.MovementSpeed.RunSpeed)/1000; // Running speed
-                    if (velocity.Y >= inputDirection.Y * attributes.MovementSpeed.RunSpeed && velocity.X >= inputDirection.X * attributes.MovementSpeed.RunSpeed)
-                        velocity = inputDirection * attributes.MovementSpeed.RunSpeed;
+                    velocity = inputDirection * attributes.MovementSpeed.RunSpeed;
 
                     currentState = PlayerState.Running;
                     currentStaminaBar -= 10f * (float)gameTime.ElapsedGameTime.TotalSeconds;
