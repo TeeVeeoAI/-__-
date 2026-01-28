@@ -84,7 +84,7 @@ namespace ____.Entities.Player
             skills = new PlayerSkills
             {
                 CanDash = true,
-                DashColldown = 3.5f,
+                DashColldown = 0.5f,
                 activeDash = false,
                 activeDashTimer = 0f,
                 HasFireball = false,
