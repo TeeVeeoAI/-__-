@@ -107,6 +107,8 @@ namespace ____.Entities.Player
 
         public void DrawUI(SpriteBatch spriteBatch, SpriteFont font, Vector2 position, Color color)
         {
+
+            // Draw player stats (debugging purposes)
             string status = $"HP: {CurrentHealth}/{stats.MaxHealth}  " +
                             $"Mana: {CurrentMana}/{stats.MaxMana}  " +
                             $"Stamina: {StaminaBar}/{stats.MaxStaminaBar}  " +
@@ -119,6 +121,8 @@ namespace ____.Entities.Player
             int separate = 25;
 
             spriteBatch.DrawString(font, status, position, color);
+
+            // Draw health, stamina, and mana bars
             spriteBatch.Draw(texture, new Rectangle((int)position.X, (int)position.Y + separate, 104, 38), Color.Black); // Background bar
 
             spriteBatch.Draw(texture, new Rectangle((int)position.X + 2, (int)position.Y + 2 + separate, 100, 10), Color.DarkRed);
