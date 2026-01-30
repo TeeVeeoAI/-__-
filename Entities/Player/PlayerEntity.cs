@@ -176,7 +176,7 @@ namespace ____.Entities.Player
                     velocity = inputDirection * attributes.MovementSpeed.DashSpeed; // Dashing speed
                     currentState = PlayerState.Dashing;
                     skills.CanDash = false;
-                    skills.DashColldown = 3.5f; // Reset dash cooldown
+                    skills.DashColldown = 0.5f; // Reset dash cooldown
                     if (!skills.activeDash)
                     {
                         currentStaminaBar -= 30f; // Instant stamina cost if dash initiated
