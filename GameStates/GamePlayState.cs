@@ -54,7 +54,7 @@ namespace ____.GameStates
         {
             spriteBatch.Begin();
 
-            player.DrawUI(spriteBatch, font, new Vector2(10, 50), Color.White);
+            player.DrawUI(spriteBatch, font, Color.White);
             fpsCounter.Draw(spriteBatch, font, new Vector2(10, 10), Color.White);
 
             spriteBatch.End();
