@@ -46,9 +46,14 @@ namespace ____.Entities.Player
             set => currentStaminaBar = Math.Clamp(value, 0f, stats.MaxStaminaBar);
         }
 
-        private PlayerInventory inventory = new PlayerInventory();
+        private PlayerInventory inventory = new PlayerInventory(10);
         private PlayerAttributes attributes;
         private PlayerSkills skills;
+
+        public PlayerInventory Inventory
+        {
+            get => inventory;
+        }
 
         private List<Keys> movementKeys = new List<Keys> { Keys.W, Keys.S, Keys.A, Keys.D };
 
