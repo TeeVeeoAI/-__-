@@ -11,7 +11,7 @@ public class Game1 : Game
     private SpriteBatch _spriteBatch;
     private GameState currentGameState;
     private Color bgColor = Color.CornflowerBlue;
-    public Point screenSize = new Point(1920, 1080);
+    public static Point screenSize = new Point(1920, 1080);
 
     public Game1()
     {

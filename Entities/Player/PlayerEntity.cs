@@ -51,9 +51,14 @@ namespace ____.Entities.Player
             set => currentStaminaBar = Math.Clamp(value, 0f, stats.MaxStaminaBar);
         }
 
-        private PlayerInventory inventory = new PlayerInventory();
+        private PlayerInventory inventory = new PlayerInventory(10);
         private PlayerAttributes attributes;
         private PlayerSkills skills;
+
+        public PlayerInventory Inventory
+        {
+            get => inventory;
+        }
 
         private List<Keys> movementKeys = new List<Keys> { Keys.W, Keys.S, Keys.A, Keys.D };
 
@@ -138,9 +143,10 @@ namespace ____.Entities.Player
             animationController.Draw(spriteBatch, position, Color.White, SpriteEffects.None, 2f);
         }
 
-        public void DrawUI(SpriteBatch spriteBatch, SpriteFont font, Vector2 position, Color color)
+        public void DrawUI(SpriteBatch spriteBatch, SpriteFont font, Color color)
         {
-
+            
+            Vector2 statusPosition = new Vector2(10, 50);
             // Draw player stats (debugging purposes)
             string status = $"HP: {CurrentHealth}/{stats.MaxHealth}  " +
                             $"Mana: {CurrentMana}/{stats.MaxMana}  " +
@@ -151,20 +157,23 @@ namespace ____.Entities.Player
                             $"XP: {stats.Experience}/{stats.ExperienceToNextLevel}  " +
                             $"Speed: {velocity.Length()}";
 
-            int separate = 25;
 
-            spriteBatch.DrawString(font, status, position, color);
+            spriteBatch.DrawString(font, status, statusPosition, color);
 
+            int separate = 25; // Separation between bars
+            Vector2 barPosition = new Vector2(10, 50 + separate);
             // Draw health, stamina, and mana bars
-            spriteBatch.Draw(texture, new Rectangle((int)position.X, (int)position.Y + separate, 104, 38), Color.Black); // Background bar
+            spriteBatch.Draw(texture, new Rectangle((int)barPosition.X, (int)barPosition.Y, 104, 38), Color.Black); // Background bar
 
-            spriteBatch.Draw(texture, new Rectangle((int)position.X + 2, (int)position.Y + 2 + separate, 100, 10), Color.DarkRed);
-            spriteBatch.Draw(texture, new Rectangle((int)position.X + 2, (int)position.Y + 14 + separate, 100, 10), Color.DarkGoldenrod);
-            spriteBatch.Draw(texture, new Rectangle((int)position.X + 2, (int)position.Y + 26 + separate, 100, 10), Color.DarkBlue);
+            spriteBatch.Draw(texture, new Rectangle((int)barPosition.X + 2, (int)barPosition.Y + 2, 100, 10), Color.DarkRed);           // Health bar background
+            spriteBatch.Draw(texture, new Rectangle((int)barPosition.X + 2, (int)barPosition.Y + 14, 100, 10), Color.DarkGoldenrod);    // Stamina bar background
+            spriteBatch.Draw(texture, new Rectangle((int)barPosition.X + 2, (int)barPosition.Y + 26, 100, 10), Color.DarkBlue);         // Mana bar background
 
-            spriteBatch.Draw(texture, new Rectangle((int)position.X + 2, (int)position.Y + 2 + separate, (int)(100 * (CurrentHealth / (float)stats.MaxHealth)), 10), Color.Red);
-            spriteBatch.Draw(texture, new Rectangle((int)position.X + 2, (int)position.Y + 14 + separate, (int)(100 * (StaminaBar / stats.MaxStaminaBar)), 10), Color.Yellow);
-            spriteBatch.Draw(texture, new Rectangle((int)position.X + 2, (int)position.Y + 26 + separate, (int)(100 * (CurrentMana / (float)stats.MaxMana)), 10), Color.Blue);
+            spriteBatch.Draw(texture, new Rectangle((int)barPosition.X + 2, (int)barPosition.Y + 2, (int)(100 * (CurrentHealth / (float)stats.MaxHealth)), 10), Color.Red); // Health bar
+            spriteBatch.Draw(texture, new Rectangle((int)barPosition.X + 2, (int)barPosition.Y + 14, (int)(100 * (StaminaBar / stats.MaxStaminaBar)), 10), Color.Yellow);   // Stamina bar
+            spriteBatch.Draw(texture, new Rectangle((int)barPosition.X + 2, (int)barPosition.Y + 26, (int)(100 * (CurrentMana / (float)stats.MaxMana)), 10), Color.Blue);   // Mana bar
+
+            
         }
 
         private void HandleMovement(GameTime gameTime)

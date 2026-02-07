@@ -37,7 +37,7 @@ namespace ____.Entities
             this.hp = hp;
             this.color = color ?? Color.White;
             this.velocity = Vector2.Zero;
-            this.friction = 0.999f;
+            this.friction = 0.98f;
         }
 
         public virtual void LoadContent(ContentManager contentManager)
