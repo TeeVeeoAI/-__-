@@ -5,8 +5,10 @@
   <Config />
   <SourceFiles>
     <File>C:/GitHub/-__-/Content/Fonts/DefaultFont.spritefont</File>
+    <File>C:/GitHub/-__-/Content/Sprites/player_spritesheet.png</File>
   </SourceFiles>
   <DestFiles>
+    <File xsi:nil="true" />
     <File xsi:nil="true" />
   </DestFiles>
 </SourceFileCollection>

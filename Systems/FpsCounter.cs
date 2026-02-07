@@ -2,7 +2,7 @@ using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace prrprr_projekt_oop.Systems
+namespace ____.Systems
 {
     public class FpsCounter
     {

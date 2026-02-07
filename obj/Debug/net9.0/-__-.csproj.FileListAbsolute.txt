@@ -33,3 +33,4 @@ C:\GitHub\-__-\obj\Debug\net9.0\refint\-__-.dll
 C:\GitHub\-__-\obj\Debug\net9.0\-__-.pdb
 C:\GitHub\-__-\obj\Debug\net9.0\-__-.genruntimeconfig.cache
 C:\GitHub\-__-\obj\Debug\net9.0\ref\-__-.dll
+C:\GitHub\-__-\bin\Debug\net9.0\Content\Sprites\player_spritesheet.xnb

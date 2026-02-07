@@ -7,7 +7,7 @@ using ____.Entities.Player;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using prrprr_projekt_oop.Systems;
+using ____.Systems;
 
 namespace ____.GameStates
 {
@@ -28,6 +28,7 @@ namespace ____.GameStates
         {
             font = contentManager.Load<SpriteFont>("Fonts/DefaultFont");
             player = new PlayerEntity(new Vector2(0, 0), pixel);
+            player.LoadContent(contentManager);
         }
         public override void Update(GameTime gameTime)
         {

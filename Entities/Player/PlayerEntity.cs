@@ -4,7 +4,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using ____.Player.Inventory;
 using ____.Systems;
+using ____.Systems.Animations;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
@@ -26,6 +28,9 @@ namespace ____.Entities.Player
         private float healthRegenTimer = 0f;
         private float manaRegenTimer = 0f;
         private float staminaBarRegenTimer = 0f;
+
+        private Texture2D spriteSheet;
+        private AnimationController animationController;
 
 
         public int CurrentHealth
@@ -90,6 +95,31 @@ namespace ____.Entities.Player
                 HasFireball = false,
                 FireballCooldown = 5.0f
             };
+
+            animationController = new();
+        }
+
+        public override void LoadContent(ContentManager contentManager)
+        {
+            spriteSheet = contentManager.Load<Texture2D>("Sprites/player_spritesheet");
+
+            var walkDownAnim = new Animation(spriteSheet, 4, 32, 32, 0.1f, true, 0);
+            animationController.AddAnimation("walk_down", walkDownAnim);
+            
+            // Row 1: Walking Up
+            var walkUpAnim = new Animation(spriteSheet, 4, 32, 32, 0.1f, true, 1);
+            animationController.AddAnimation("walk_up", walkUpAnim);
+            
+            // Row 2: Walking Right
+            var walkRightAnim = new Animation(spriteSheet, 4, 32, 32, 0.1f, true, 2);
+            animationController.AddAnimation("walk_right", walkRightAnim);
+            
+            // Row 3: Walking Left
+            var walkLeftAnim = new Animation(spriteSheet, 4, 32, 32, 0.1f, true, 3);
+            animationController.AddAnimation("walk_left", walkLeftAnim);
+            
+            // Start with down animation
+            animationController.Play("walk_down");
         }
 
         public override void Update(GameTime gameTime)
@@ -97,12 +127,15 @@ namespace ____.Entities.Player
             HandleMovement(gameTime);
             HandleRegeneration(gameTime);
             HandleCooldown(gameTime);
+            UpdateAnimation();
+            animationController.Update(gameTime);
         }
 
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
-            base.Draw(gameTime, spriteBatch);
+            //base.Draw(gameTime, spriteBatch);
             // Additional player-specific drawing (e.g., animations) can go here
+            animationController.Draw(spriteBatch, position, Color.White, SpriteEffects.None, 2f);
         }
 
         public void DrawUI(SpriteBatch spriteBatch, SpriteFont font, Vector2 position, Color color)
@@ -258,6 +291,40 @@ namespace ____.Entities.Player
                 {
                     skills.activeDash = false;
                 }
+            }
+        }
+
+        private void UpdateAnimation()
+        {
+            // Play the appropriate animation based on direction
+            string animName = "";
+            
+            switch (currentDirection)
+            {
+                case PlayerDirection.Down:
+                    animName = "walk_down";
+                    break;
+                case PlayerDirection.Up:
+                    animName = "walk_up";
+                    break;
+                case PlayerDirection.Right:
+                    animName = "walk_right";
+                    break;
+                case PlayerDirection.Left:
+                    animName = "walk_left";
+                    break;
+            }
+            
+            // Only play if moving, otherwise keep on first frame
+            if (velocity.Length() > 0)
+            {
+                animationController.Play(animName);
+            }
+            else
+            {
+                // Show idle frame (first frame of current direction)
+                animationController.Play(animName);
+                animationController.GetCurrentAnimation().Reset();
             }
         }
 
