@@ -8,7 +8,6 @@ using ____.Systems;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using ____.Systems;
 using Microsoft.Xna.Framework.Input;
 
 namespace ____.GameStates
@@ -37,17 +36,18 @@ namespace ____.GameStates
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
-            
+
             if (currentSubState == GamePlaySubState.Normal)
             {
                 player.Update(gameTime);
-            } else if (currentSubState == GamePlaySubState.Inventory)
+            }
+            else if (currentSubState == GamePlaySubState.Inventory)
             {
                 // Update inventory logic here
             }
 
             HandleInput();
-            
+
             camera.Pos = player.Position;
 
             fpsCounter.Update(gameTime);
