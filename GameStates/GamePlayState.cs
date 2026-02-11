@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using ____.Camera;
 using ____.Entities.Player;
 using ____.Systems;
+using ____.World;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -18,6 +19,7 @@ namespace ____.GameStates
         private PlayerEntity player;
         private FpsCounter fpsCounter;
         private GamePlaySubState currentSubState;
+        private Map map;
 
         public GamePlayState(Game1 game, GraphicsDevice graphics, ContentManager content)
             : base(game, graphics, content)
@@ -26,12 +28,14 @@ namespace ____.GameStates
             camera = new Camera2D(graphicsDevice);
             fpsCounter = new FpsCounter();
             currentSubState = GamePlaySubState.Normal;
+            map = new(10, 10);
         }
         public override void LoadContent()
         {
             font = contentManager.Load<SpriteFont>("Fonts/DefaultFont");
             player = new PlayerEntity(new Vector2(0, 0), pixel);
             player.LoadContent(contentManager);
+            map.LoadContent(contentManager);
         }
         public override void Update(GameTime gameTime)
         {
@@ -46,6 +50,8 @@ namespace ____.GameStates
                 // Update inventory logic here
             }
 
+            map.Update(gameTime);
+
             HandleInput();
 
             camera.Pos = player.Position;
@@ -58,6 +64,7 @@ namespace ____.GameStates
 
             spriteBatch.Begin(transformMatrix: camera.Get_transformation());
 
+            map.Draw(spriteBatch, camera, graphicsDevice);
             player.Draw(gameTime, spriteBatch);
 
             spriteBatch.End();
