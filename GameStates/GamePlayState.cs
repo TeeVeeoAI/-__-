@@ -25,15 +25,15 @@ namespace ____.GameStates
             : base(game, graphics, content)
         {
             BGcolor = Color.Green;
-            camera = new Camera2D(graphicsDevice);
-            fpsCounter = new FpsCounter();
+            camera = new(graphicsDevice);
+            fpsCounter = new();
             currentSubState = GamePlaySubState.Normal;
             map = new(10, 10);
         }
         public override void LoadContent()
         {
             font = contentManager.Load<SpriteFont>("Fonts/DefaultFont");
-            player = new PlayerEntity(new Vector2(0, 0), pixel);
+            player = new(new(0, 0), pixel);
             player.LoadContent(contentManager);
             map.LoadContent(contentManager);
         }

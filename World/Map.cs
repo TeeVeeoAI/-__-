@@ -22,11 +22,11 @@ namespace ____.World
         public int TileWidth => tileWidth;
         public int TileHeight => tileHeight;
 
-        public Map(int width, int height, int tileWidth = 32, int tileHeight = 32)
+        public Map(int width, int height, int tileWidth = 640, int tileHeight = 640)
         {
             this.width = width;
             this.height = height;
-            this.tileWidth = width;
+            this.tileWidth = tileWidth;
             this.tileHeight = tileHeight;
 
             tiles = new Tile[width, height];
@@ -46,7 +46,13 @@ namespace ____.World
 
         public void LoadContent(ContentManager contentManager)
         {
-            
+            for (int x = 0; x < tiles.GetLength(0) - 1; x++)
+            {
+                for (int y = 0; y < tiles.GetLength(1) - 1; y++)
+                {
+                    tiles[x,y].LoadContent(contentManager);
+                }
+            }
         }
 
         public Tile GetTile(int x, int y)
@@ -70,6 +76,7 @@ namespace ____.World
             
         }
 
+
         public void Draw(SpriteBatch spriteBatch, Camera2D camera, GraphicsDevice graphicsDevice)
         {
             // Get camera bounds in world space
@@ -89,6 +96,7 @@ namespace ____.World
                     tiles[x, y]?.Draw(spriteBatch, tileWidth, tileHeight);
                 }
             }
+
         }
 
         private Rectangle GetCameraBounds(Camera2D camera, GraphicsDevice graphicsDevice)
