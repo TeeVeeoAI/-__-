@@ -16,11 +16,15 @@ namespace ____.World
         private int height;
         private int tileWidth;
         private int tileHeight;
+        private Vector2 position;
 
         public int Width => width;
         public int Height => height;
         public int TileWidth => tileWidth;
         public int TileHeight => tileHeight;
+        public Vector2 Position => position;
+        public static Map CurrentMap { get; private set; }
+        public Rectangle Rec;
 
         public Map(int width, int height, int tileWidth = 640, int tileHeight = 640)
         {
@@ -28,6 +32,8 @@ namespace ____.World
             this.height = height;
             this.tileWidth = tileWidth;
             this.tileHeight = tileHeight;
+            this.position = Vector2.Zero;
+            Rec = new Rectangle(position.ToPoint(), new Point(width * tileWidth, height * tileHeight));
 
             tiles = new Tile[width, height];
             InitializeMap();
@@ -73,7 +79,7 @@ namespace ____.World
 
         public void Update(GameTime gameTime)
         {
-            
+            CurrentMap = this;
         }
 
 

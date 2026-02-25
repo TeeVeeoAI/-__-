@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using ____.Player.Inventory;
 using ____.Systems;
 using ____.Systems.Animations;
+using ____.World;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -241,6 +242,10 @@ namespace ____.Entities.Player
                     currentState = PlayerState.Idle;
                 }
             }
+            
+            // Clamp position to map boundaries
+            position.X = Math.Clamp(position.X, Map.CurrentMap.Position.X, Map.CurrentMap.Rec.Width - hitbox.Width);
+            position.Y = Math.Clamp(position.Y, Map.CurrentMap.Position.Y, Map.CurrentMap.Rec.Height - hitbox.Height);
 
             position += velocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
             hitbox.Location = position.ToPoint();

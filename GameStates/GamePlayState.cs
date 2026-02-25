@@ -27,7 +27,7 @@ namespace ____.GameStates
             BGcolor = Color.Green;
             camera = new(graphicsDevice);
             fpsCounter = new();
-            currentSubState = GamePlaySubState.Normal;
+            currentSubState = GamePlaySubState.LoadingMap;
             map = new(10, 10);
         }
         public override void LoadContent()
@@ -48,6 +48,12 @@ namespace ____.GameStates
             else if (currentSubState == GamePlaySubState.Inventory)
             {
                 // Update inventory logic here
+            } else if (currentSubState == GamePlaySubState.LoadingMap)
+            {
+                if (map != null)
+                {
+                    currentSubState = GamePlaySubState.Normal;
+                }
             }
 
             map.Update(gameTime);
@@ -65,6 +71,14 @@ namespace ____.GameStates
             spriteBatch.Begin(transformMatrix: camera.Get_transformation());
 
             map.Draw(spriteBatch, camera, graphicsDevice);
+            if (currentSubState == GamePlaySubState.Normal)
+            {
+                spriteBatch.Draw(
+                    pixel, 
+                    new Rectangle(Map.CurrentMap.Position.ToPoint(), Map.CurrentMap.Rec.Size), 
+                    new Color(0, 0, 0, 50)
+                );
+            }
             player.Draw(gameTime, spriteBatch);
 
             spriteBatch.End();
@@ -100,6 +114,7 @@ namespace ____.GameStates
     {
         Normal,
         Inventory,
-        PauseMenu
+        PauseMenu,
+        LoadingMap
     }
 }
