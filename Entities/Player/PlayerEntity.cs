@@ -141,7 +141,8 @@ namespace ____.Entities.Player
         {
             //base.Draw(gameTime, spriteBatch);
             // Additional player-specific drawing (e.g., animations) can go here
-            animationController.Draw(spriteBatch, position, Color.White, SpriteEffects.None, 2f);
+            animationController.Draw(spriteBatch, position - hitbox.Size.ToVector2()/5, Color.White, SpriteEffects.None, 2f);
+            //spriteBatch.Draw(texture, hitbox, Color.Red * 0.5f); // Draw hitbox for debugging
         }
 
         public void DrawUI(SpriteBatch spriteBatch, SpriteFont font, Color color)

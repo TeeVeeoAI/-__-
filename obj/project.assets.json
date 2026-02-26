@@ -295,19 +295,24 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\tosi07001\\.nuget\\packages\\": {}
+    "C:\\Users\\tores\\.nuget\\packages\\": {},
+    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Github\\-__-\\-__-.csproj",
+      "projectUniqueName": "C:\\GitHub\\-__-\\-__-.csproj",
       "projectName": "-__-",
-      "projectPath": "C:\\Github\\-__-\\-__-.csproj",
-      "packagesPath": "C:\\Users\\tosi07001\\.nuget\\packages\\",
-      "outputPath": "C:\\Github\\-__-\\obj\\",
+      "projectPath": "C:\\GitHub\\-__-\\-__-.csproj",
+      "packagesPath": "C:\\Users\\tores\\.nuget\\packages\\",
+      "outputPath": "C:\\GitHub\\-__-\\obj\\",
       "projectStyle": "PackageReference",
+      "fallbackFolders": [
+        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+      ],
       "configFilePaths": [
-        "C:\\Users\\tosi07001\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\tores\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -364,7 +369,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.309/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.301/PortableRuntimeIdentifierGraph.json"
       }
     }
   }

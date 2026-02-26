@@ -52,9 +52,9 @@ namespace ____.World
 
         public void LoadContent(ContentManager contentManager)
         {
-            for (int x = 0; x < tiles.GetLength(0) - 1; x++)
+            for (int x = 0; x < tiles.GetLength(0); x++)
             {
-                for (int y = 0; y < tiles.GetLength(1) - 1; y++)
+                for (int y = 0; y < tiles.GetLength(1); y++)
                 {
                     tiles[x,y].LoadContent(contentManager);
                 }

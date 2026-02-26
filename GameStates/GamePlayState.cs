@@ -71,14 +71,7 @@ namespace ____.GameStates
             spriteBatch.Begin(transformMatrix: camera.Get_transformation());
 
             map.Draw(spriteBatch, camera, graphicsDevice);
-            if (currentSubState == GamePlaySubState.Normal)
-            {
-                spriteBatch.Draw(
-                    pixel, 
-                    new Rectangle(Map.CurrentMap.Position.ToPoint(), Map.CurrentMap.Rec.Size), 
-                    new Color(0, 0, 0, 50)
-                );
-            }
+            
             player.Draw(gameTime, spriteBatch);
 
             spriteBatch.End();
