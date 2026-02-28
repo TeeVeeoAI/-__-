@@ -37,11 +37,11 @@ namespace ____.World
             //texture.SetData(new[] { Color.White });
         }
 
-        public void Draw(SpriteBatch spriteBatch, int tileWidth, int tileHeight)
+        public void Draw(SpriteBatch spriteBatch, int tileWidth, int tileHeight, Vector2 mapPosition)
         {
             if (texture != null)
             {
-                Vector2 position = new Vector2(X * tileWidth, Y * tileHeight);
+                Vector2 position = mapPosition + new Vector2(X * tileWidth, Y * tileHeight);
 
 
                 if (SourceRectangle.HasValue)

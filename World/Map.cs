@@ -32,7 +32,10 @@ namespace ____.World
             this.height = height;
             this.tileWidth = tileWidth;
             this.tileHeight = tileHeight;
-            this.position = Vector2.Zero;
+            this.position = new Vector2(
+                -(width * tileWidth) / 2f,
+                -(height * tileHeight) / 2f
+            );
             Rec = new Rectangle(position.ToPoint(), new Point(width * tileWidth, height * tileHeight));
 
             tiles = new Tile[width, height];
@@ -89,17 +92,17 @@ namespace ____.World
             Rectangle cameraBounds = GetCameraBounds(camera, graphicsDevice);
 
             // Calculate which tiles are visible
-            int startX = Math.Max(0, cameraBounds.Left / tileWidth);
-            int endX = Math.Min(width, (cameraBounds.Right / tileWidth) + 1);
-            int startY = Math.Max(0, cameraBounds.Top / tileHeight);
-            int endY = Math.Min(height, (cameraBounds.Bottom / tileHeight) + 1);
+            int startX = Math.Max(0, (int)Math.Floor((cameraBounds.Left - position.X) / tileWidth));
+            int endX = Math.Min(width, (int)Math.Floor((cameraBounds.Right - position.X) / tileWidth) + 1);
+            int startY = Math.Max(0, (int)Math.Floor((cameraBounds.Top - position.Y) / tileHeight));
+            int endY = Math.Min(height, (int)Math.Floor((cameraBounds.Bottom - position.Y) / tileHeight) + 1);
 
             // Only draw visible tiles
             for (int x = startX; x < endX; x++)
             {
                 for (int y = startY; y < endY; y++)
                 {
-                    tiles[x, y]?.Draw(spriteBatch, tileWidth, tileHeight);
+                    tiles[x, y]?.Draw(spriteBatch, tileWidth, tileHeight, position);
                 }
             }
 
@@ -127,14 +130,14 @@ namespace ____.World
 
         public Vector2 TileToWorld(int tileX, int tileY)
         {
-            return new Vector2(tileX * tileWidth, tileY * tileHeight);
+            return position + new Vector2(tileX * tileWidth, tileY * tileHeight);
         }
 
         public Point WorldToTile(Vector2 worldPosition)
         {
             return new Point(
-                (int)(worldPosition.X / tileWidth),
-                (int)(worldPosition.Y / tileHeight)
+                (int)Math.Floor((worldPosition.X - position.X) / tileWidth),
+                (int)Math.Floor((worldPosition.Y - position.Y) / tileHeight)
             );
         }
     }

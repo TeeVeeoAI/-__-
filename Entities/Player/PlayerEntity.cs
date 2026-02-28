@@ -245,8 +245,8 @@ namespace ____.Entities.Player
             }
             
             // Clamp position to map boundaries
-            position.X = Math.Clamp(position.X, Map.CurrentMap.Position.X, Map.CurrentMap.Rec.Width - hitbox.Width);
-            position.Y = Math.Clamp(position.Y, Map.CurrentMap.Position.Y, Map.CurrentMap.Rec.Height - hitbox.Height);
+            position.X = Math.Clamp(position.X, Map.CurrentMap.Rec.Left, Map.CurrentMap.Rec.Right - hitbox.Width);
+            position.Y = Math.Clamp(position.Y, Map.CurrentMap.Rec.Top, Map.CurrentMap.Rec.Bottom - hitbox.Height);
 
             position += velocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
             hitbox.Location = position.ToPoint();
