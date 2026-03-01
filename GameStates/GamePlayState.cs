@@ -28,7 +28,7 @@ namespace ____.GameStates
             camera = new(graphicsDevice);
             fpsCounter = new();
             currentSubState = GamePlaySubState.LoadingMap;
-            map = new(10, 10);
+            map = Map.Load();
         }
         public override void LoadContent()
         {

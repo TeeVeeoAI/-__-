@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ____.Camera;
+using ____.Systems.LoadData.LoadWorld;
+using ____.Systems.SaveData.SaveWorld;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -139,6 +141,21 @@ namespace ____.World
                 (int)Math.Floor((worldPosition.X - position.X) / tileWidth),
                 (int)Math.Floor((worldPosition.Y - position.Y) / tileHeight)
             );
+        }
+
+        public static Map Load(string filePath = null)
+        {
+            return LoadMap.Load(filePath);
+        }
+
+        public static void Save(Map map, string filePath = null)
+        {
+            SaveMap.Save(map, filePath);
+        }
+
+        public void Save(string filePath = null)
+        {
+            SaveMap.Save(this, filePath);
         }
     }
 }
