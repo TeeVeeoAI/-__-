@@ -29,6 +29,7 @@ namespace ____.Entities.Player
         private float healthRegenTimer = 0f;
         private float manaRegenTimer = 0f;
         private float staminaBarRegenTimer = 0f;
+        private float runColdownTimer = 0f;
 
         private Texture2D spriteSheet;
         private AnimationController animationController;
@@ -63,8 +64,8 @@ namespace ____.Entities.Player
 
         private List<Keys> movementKeys = new List<Keys> { Keys.W, Keys.S, Keys.A, Keys.D };
 
-        public PlayerEntity(Vector2 position, Texture2D texture, StatScaling statScaling = null)
-            : base(position, 100f, new Vector2(50, 50), texture, 100, Color.Black)
+        public PlayerEntity(StatScaling statScaling = null)
+            : base(new (-25, -25), 100f, new Vector2(50, 50), 100, Color.Black)
         {
             // Initialize scaling config 
             scaling = statScaling ?? new StatScaling();
@@ -107,6 +108,8 @@ namespace ____.Entities.Player
 
         public override void LoadContent(ContentManager contentManager)
         {
+            this.LoadContent(contentManager); // Load base content (e.g., hitbox texture) currently just a white pixel
+
             spriteSheet = contentManager.Load<Texture2D>("Sprites/player_spritesheet");
 
             var walkDownAnim = new Animation(spriteSheet, 4, 32, 32, 0.1f, true, 0);
@@ -167,9 +170,9 @@ namespace ____.Entities.Player
             // Draw health, stamina, and mana bars
             spriteBatch.Draw(texture, new Rectangle((int)barPosition.X, (int)barPosition.Y, 104, 38), Color.Black); // Background bar
 
-            spriteBatch.Draw(texture, new Rectangle((int)barPosition.X + 2, (int)barPosition.Y + 2, 100, 10), Color.DarkRed);           // Health bar background
-            spriteBatch.Draw(texture, new Rectangle((int)barPosition.X + 2, (int)barPosition.Y + 14, 100, 10), Color.DarkGoldenrod);    // Stamina bar background
-            spriteBatch.Draw(texture, new Rectangle((int)barPosition.X + 2, (int)barPosition.Y + 26, 100, 10), Color.DarkBlue);         // Mana bar background
+            spriteBatch.Draw(texture, new Rectangle((int)barPosition.X + 2, (int)barPosition.Y + 2, 100, 10), Color.DarkRed);         // Health bar background
+            spriteBatch.Draw(texture, new Rectangle((int)barPosition.X + 2, (int)barPosition.Y + 14, 100, 10), Color.DarkGoldenrod);  // Stamina bar background
+            spriteBatch.Draw(texture, new Rectangle((int)barPosition.X + 2, (int)barPosition.Y + 26, 100, 10), Color.DarkBlue);       // Mana bar background
 
             spriteBatch.Draw(texture, new Rectangle((int)barPosition.X + 2, (int)barPosition.Y + 2, (int)(100 * (CurrentHealth / (float)stats.MaxHealth)), 10), Color.Red); // Health bar
             spriteBatch.Draw(texture, new Rectangle((int)barPosition.X + 2, (int)barPosition.Y + 14, (int)(100 * (StaminaBar / stats.MaxStaminaBar)), 10), Color.Yellow);   // Stamina bar
@@ -206,16 +209,7 @@ namespace ____.Entities.Player
             if (inputDirection != Vector2.Zero)
             {
                 inputDirection.Normalize();
-                if (InputSystem.IsKeyDown(Keys.LeftShift) && currentStaminaBar >= 0f)
-                {
-                    velocity = inputDirection * attributes.MovementSpeed.RunSpeed;
-
-                    currentState = PlayerState.Running;
-                    currentStaminaBar -= 10f * (float)gameTime.ElapsedGameTime.TotalSeconds;
-                    if (currentStaminaBar < 0f)
-                        currentStaminaBar = 0f;
-                }
-                else if (((InputSystem.IsKeyDown(Keys.Space) && skills.CanDash) || skills.activeDash) && currentStaminaBar >= 30f)
+                if (((InputSystem.IsKeyDown(Keys.Space) && skills.CanDash) || skills.activeDash) && currentStaminaBar >= 30f)
                 {
                     velocity = inputDirection * attributes.MovementSpeed.DashSpeed; // Dashing speed
                     currentState = PlayerState.Dashing;
@@ -228,10 +222,22 @@ namespace ____.Entities.Player
                         skills.activeDashTimer = 0.5f; // Dash lasts for 0.5 seconds
                     }
                 }
+                else if (InputSystem.IsKeyDown(Keys.LeftShift) && currentStaminaBar >= 0f && runColdownTimer <= 0f)
+                {
+                    velocity = inputDirection * attributes.MovementSpeed.RunSpeed;
+
+                    currentState = PlayerState.Running;
+                    currentStaminaBar -= 10f * (float)gameTime.ElapsedGameTime.TotalSeconds;
+                }
                 else
                 {
                     velocity = inputDirection * attributes.MovementSpeed.WalkSpeed; // Walking speed
                     currentState = PlayerState.Walking;
+                }
+                if (currentStaminaBar < 0f)
+                {
+                    currentStaminaBar = 0f;
+                    runColdownTimer = 2f; // 2 second cooldown after stamina depletes
                 }
             }
             else
@@ -283,29 +289,40 @@ namespace ____.Entities.Player
 
         private void HandleCooldown(GameTime gameTime)
         {
+            float deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
+
             if (!skills.CanDash)
             {
-                skills.DashColldown -= (float)gameTime.ElapsedGameTime.TotalSeconds;
+                skills.DashColldown -= deltaTime;
                 if (skills.DashColldown <= 0f)
                 {
                     skills.CanDash = true;
                 }
             }
+
             if (!skills.HasFireball)
             {
-                skills.FireballCooldown -= (float)gameTime.ElapsedGameTime.TotalSeconds;
+                skills.FireballCooldown -= deltaTime;
                 if (skills.FireballCooldown <= 0f)
                 {
                     skills.HasFireball = true;
                 }
             }
+
             if (skills.activeDash)
             {
-                skills.activeDashTimer -= (float)gameTime.ElapsedGameTime.TotalSeconds;
+                skills.activeDashTimer -= deltaTime;
                 if (skills.activeDashTimer <= 0f)
                 {
                     skills.activeDash = false;
                 }
+            }
+
+            if (currentState != PlayerState.Running && runColdownTimer >= 0f)
+            {
+                runColdownTimer -= deltaTime;
+                if (runColdownTimer < 0f)
+                    runColdownTimer = 0f;
             }
         }
 

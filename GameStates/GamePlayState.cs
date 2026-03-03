@@ -33,7 +33,7 @@ namespace ____.GameStates
         public override void LoadContent()
         {
             font = contentManager.Load<SpriteFont>("Fonts/DefaultFont");
-            player = new(new(0, 0), pixel);
+            player = new();
             player.LoadContent(contentManager);
             map.LoadContent(contentManager);
         }

@@ -32,9 +32,26 @@ namespace ____.World
 
         public void LoadContent(ContentManager contentManager)
         {
-            texture = contentManager.Load<Texture2D>("grass");
-            //texture = new Texture2D(graphicsDevice, 1, 1);
-            //texture.SetData(new[] { Color.White });
+            GraphicsDevice gd = Game1.Instance.GraphicsDevice;
+            switch (Type)
+            {
+                case TileType.Grass:
+                    texture = contentManager.Load<Texture2D>("grass");
+                    break;
+                case TileType.Water:
+                    texture = contentManager.Load<Texture2D>("water");
+                    break;
+                case TileType.Stone:
+                    texture = contentManager.Load<Texture2D>("stone");
+                    break;
+                case TileType.Wall:
+                    texture = contentManager.Load<Texture2D>("wall");
+                    break;
+                default:
+                    texture = new Texture2D(gd, 1, 1);
+                    texture.SetData(new[] { Color.White });
+                    break;
+            }
         }
 
         public void Draw(SpriteBatch spriteBatch, int tileWidth, int tileHeight, Vector2 mapPosition)

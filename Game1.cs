@@ -28,6 +28,7 @@ public class Game1 : Game
     protected override void Initialize()
     {
         // TODO: Add your initialization logic here
+        instance = this;
 
         base.Initialize();
     }
@@ -74,5 +75,14 @@ public class Game1 : Game
     {
         currentGameState = newState;
         currentGameState.LoadContent();
+    }
+
+    static Game1 instance;
+    public static Game1 Instance
+    {
+        get
+        {   
+            return instance;
+        }
     }
 }
