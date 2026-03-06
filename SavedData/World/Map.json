@@ -5,7 +5,7 @@
         "TileWidth": 640,
         "TileHeight": 640,
         "Tiles": [
-            {"X": 0, "Y": 0, "Type": "Grass"},
+            {"X": 0, "Y": 0, "Type": "Water"},
             {"X": 1, "Y": 0, "Type": "Grass"},
             {"X": 2, "Y": 0, "Type": "Grass"},
             {"X": 3, "Y": 0, "Type": "Grass"},

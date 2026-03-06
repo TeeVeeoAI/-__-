@@ -65,7 +65,7 @@ namespace ____.Entities.Player
         private List<Keys> movementKeys = new List<Keys> { Keys.W, Keys.S, Keys.A, Keys.D };
 
         public PlayerEntity(StatScaling statScaling = null)
-            : base(new (-25, -25), 100f, new Vector2(50, 50), 100, Color.Black)
+            : base(new(-25, -25), 100f, new(50, 50), 100, Color.Black)
         {
             // Initialize scaling config 
             scaling = statScaling ?? new StatScaling();
@@ -151,7 +151,7 @@ namespace ____.Entities.Player
         public void DrawUI(SpriteBatch spriteBatch, SpriteFont font, Color color)
         {
             
-            Vector2 statusPosition = new Vector2(10, 50);
+            Vector2 statusPosition = new(10, 50);
             // Draw player stats (debugging purposes)
             string status = $"HP: {CurrentHealth}/{stats.MaxHealth}  " +
                             $"Mana: {CurrentMana}/{stats.MaxMana}  " +
@@ -166,7 +166,7 @@ namespace ____.Entities.Player
             spriteBatch.DrawString(font, status, statusPosition, color);
 
             int separate = 25; // Separation between bars
-            Vector2 barPosition = new Vector2(10, 50 + separate);
+            Vector2 barPosition = new(10, 50 + separate);
             // Draw health, stamina, and mana bars
             spriteBatch.Draw(texture, new Rectangle((int)barPosition.X, (int)barPosition.Y, 104, 38), Color.Black); // Background bar
 
