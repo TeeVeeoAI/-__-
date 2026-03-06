@@ -12,8 +12,8 @@ namespace ____.Entities.Enemies
     {
         protected bool damageByPlayer = false;
         protected int damage;
-        public BaseEnemyEntity(Vector2 position, float speed, Vector2 heightAndWidth, Texture2D texture, int damage = 10, int hp = 100, Color? color = null)
-            : base(position, speed, heightAndWidth, texture, hp, color)
+        public BaseEnemyEntity(Vector2 position, float speed, Vector2 heightAndWidth, int damage = 10, int hp = 100, Color? color = null)
+            : base(position, speed, heightAndWidth, hp, color)
         {
             this.damage = damage;
         }

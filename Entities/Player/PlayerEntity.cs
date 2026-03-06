@@ -108,7 +108,7 @@ namespace ____.Entities.Player
 
         public override void LoadContent(ContentManager contentManager)
         {
-            this.LoadContent(contentManager); // Load base content (e.g., hitbox texture) currently just a white pixel
+            base.LoadContent(contentManager); // Load base content (e.g., hitbox texture) currently just a white pixel
 
             spriteSheet = contentManager.Load<Texture2D>("Sprites/player_spritesheet");
 
