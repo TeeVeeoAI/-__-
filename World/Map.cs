@@ -143,6 +143,27 @@ namespace ____.World
             );
         }
 
+        public bool IsWalkable(Rectangle rect)
+        {
+            // Convert the rectangle to tile coordinates
+            Point topLeft = WorldToTile(new Vector2(rect.Left, rect.Top));
+            Point bottomRight = WorldToTile(new Vector2(rect.Right - 1, rect.Bottom - 1)); // Subtract 1 to avoid off-by-one errors
+
+            // Check all tiles that the rectangle covers
+            for (int x = topLeft.X; x <= bottomRight.X; x++)
+            {
+                for (int y = topLeft.Y; y <= bottomRight.Y; y++)
+                {
+                    Tile tile = GetTile(x, y);
+                    if (tile == null || !tile.IsWalkable)
+                    {
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
+
         public static Map Load(string filePath = null)
         {
             return LoadMap.Load(filePath);

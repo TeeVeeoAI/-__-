@@ -250,11 +250,45 @@ namespace ____.Entities.Player
                 }
             }
             
-            // Clamp position to map boundaries
+            Vector2 newPosition = position + velocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+            Rectangle checkHitbox = new Rectangle((int)newPosition.X, (int)newPosition.Y, hitbox.Width, hitbox.Height);
+
+            if (Map.CurrentMap.IsWalkable(checkHitbox))
+            {
+                position = newPosition;
+            }
+            else
+            {
+                // Try sliding: check if moving only in X is possible
+                Vector2 slideXPosition = new Vector2(newPosition.X, position.Y);
+                Rectangle slideXHitbox = new Rectangle((int)slideXPosition.X, (int)slideXPosition.Y, hitbox.Width, hitbox.Height);
+                if (Map.CurrentMap.IsWalkable(slideXHitbox))
+                {
+                    position = slideXPosition;
+                }
+                else
+                {
+                    // Try sliding in Y
+                    Vector2 slideYPosition = new Vector2(position.X, newPosition.Y);
+                    Rectangle slideYHitbox = new Rectangle((int)slideYPosition.X, (int)slideYPosition.Y, hitbox.Width, hitbox.Height);
+                    if (Map.CurrentMap.IsWalkable(slideYHitbox))
+                    {
+                        position = slideYPosition;
+                    }
+                    else
+                    {
+                        // Can't move at all
+                        velocity = Vector2.Zero;
+                        currentState = PlayerState.Idle;
+                    }
+                }
+            }
+
+            // Clamp position to map boundaries (after movement)
             position.X = Math.Clamp(position.X, Map.CurrentMap.Rec.Left, Map.CurrentMap.Rec.Right - hitbox.Width);
             position.Y = Math.Clamp(position.Y, Map.CurrentMap.Rec.Top, Map.CurrentMap.Rec.Bottom - hitbox.Height);
 
-            position += velocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
             hitbox.Location = position.ToPoint();
         }
 
