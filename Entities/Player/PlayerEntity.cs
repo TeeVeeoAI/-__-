@@ -188,26 +188,39 @@ namespace ____.Entities.Player
             if (InputSystem.IsKeyDown(movementKeys[(int)MovementKeys.Up]))
             {
                 inputDirection.Y -= 1;
-                currentDirection = PlayerDirection.Up;
             }
             if (InputSystem.IsKeyDown(movementKeys[(int)MovementKeys.Down]))
             {
                 inputDirection.Y += 1;
-                currentDirection = PlayerDirection.Down;
             }
             if (InputSystem.IsKeyDown(movementKeys[(int)MovementKeys.Left]))
             {
                 inputDirection.X -= 1;
-                currentDirection = PlayerDirection.Left;
             }
             if (InputSystem.IsKeyDown(movementKeys[(int)MovementKeys.Right]))
             {
                 inputDirection.X += 1;
-                currentDirection = PlayerDirection.Right;
             }
 
             if (inputDirection != Vector2.Zero)
             {
+                if (inputDirection.X == 0 && inputDirection.Y < 0)
+                    currentDirection = PlayerDirection.Up;
+                else if (inputDirection.X == 0 && inputDirection.Y > 0)
+                    currentDirection = PlayerDirection.Down;
+                else if (inputDirection.X < 0 && inputDirection.Y == 0)
+                    currentDirection = PlayerDirection.Left;
+                else if (inputDirection.X > 0 && inputDirection.Y == 0)
+                    currentDirection = PlayerDirection.Right;
+                else if (inputDirection.X < 0 && inputDirection.Y < 0)
+                    currentDirection = PlayerDirection.UpLeft;
+                else if (inputDirection.X > 0 && inputDirection.Y < 0)
+                    currentDirection = PlayerDirection.UpRight;
+                else if (inputDirection.X < 0 && inputDirection.Y > 0)
+                    currentDirection = PlayerDirection.DownLeft;
+                else if (inputDirection.X > 0 && inputDirection.Y > 0)
+                    currentDirection = PlayerDirection.DownRight;
+
                 inputDirection.Normalize();
                 if (((InputSystem.IsKeyDown(Keys.Space) && skills.CanDash) || skills.activeDash) && currentStaminaBar >= 30f)
                 {
@@ -455,7 +468,11 @@ namespace ____.Entities.Player
         Up,
         Down,
         Left,
-        Right
+        Right,
+        UpLeft,
+        UpRight,
+        DownLeft,
+        DownRight
     }
 
     public struct PlayerAttributes

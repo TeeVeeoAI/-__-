@@ -36,6 +36,7 @@ namespace ____.GameStates
             player = new();
             player.LoadContent(contentManager);
             map.LoadContent(contentManager);
+            camera.LoadContent(contentManager, map.Rec);
         }
         public override void Update(GameTime gameTime)
         {

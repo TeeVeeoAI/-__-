@@ -2,7 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ____.World;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace ____.Camera
@@ -14,6 +16,8 @@ namespace ____.Camera
         private Vector2 pos; // Position
         protected float rotation; // Rotation
         private GraphicsDevice graphicsDevice;
+        private Rectangle mapBounds; // Map boundaries to clamp camera
+        private bool boundsSet = false;
 
         public Camera2D(GraphicsDevice graphicsDevice)
         {
@@ -21,11 +25,30 @@ namespace ____.Camera
             rotation = 0.0f;
             pos = Vector2.Zero;
             this.graphicsDevice = graphicsDevice;
+            mapBounds = Rectangle.Empty;
         }
+
+        public void SetMapBounds(Rectangle bounds)
+        {
+            mapBounds = bounds;
+            boundsSet = true;
+            ClampPosition();
+        }
+
+        public void LoadContent(ContentManager contentManager, Rectangle mapBounds)
+        {
+            SetMapBounds(mapBounds);
+        }
+
         public float Zoom
         {
             get { return zoom; }
-            set { zoom = value; if (zoom < 0.1f) zoom = 0.1f; }
+            set 
+            { 
+                zoom = value;
+                if (zoom < 0.1f) zoom = 0.1f;
+                ClampPosition();
+            }
         }
 
         public float Rotation
@@ -37,11 +60,29 @@ namespace ____.Camera
         public void Move(Vector2 amount)
         {
             pos += amount;
+            ClampPosition();
+        }
+
+        private void ClampPosition()
+        {
+            if (!boundsSet) return;
+
+            // Calculate the visible area based on viewport size and zoom
+            float viewportWidth = graphicsDevice.Viewport.Width / zoom;
+            float viewportHeight = graphicsDevice.Viewport.Height / zoom;
+
+            // Clamp camera position so it doesn't go outside map bounds
+            pos.X = Math.Clamp(pos.X, mapBounds.Left + viewportWidth * 0.5f, mapBounds.Right - viewportWidth * 0.5f);
+            pos.Y = Math.Clamp(pos.Y, mapBounds.Top + viewportHeight * 0.5f, mapBounds.Bottom - viewportHeight * 0.5f);
         }
         public Vector2 Pos
         {
             get { return pos; }
-            set { pos = value; }
+            set 
+            { 
+                pos = value;
+                ClampPosition();
+            }
         }
         public Matrix Get_transformation()
         {
