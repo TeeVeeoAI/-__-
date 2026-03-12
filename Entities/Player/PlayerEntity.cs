@@ -1,7 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using ____.Player.Inventory;
 using ____.Systems;
 using ____.Systems.Animations;
@@ -15,6 +13,7 @@ namespace ____.Entities.Player
 {
     public class PlayerEntity : BaseEntity
     {
+        #region Player-specific fields and properties
         private PlayerState currentState = PlayerState.Idle;
         private PlayerDirection currentDirection = PlayerDirection.Down;
 
@@ -33,8 +32,7 @@ namespace ____.Entities.Player
 
         private Texture2D spriteSheet;
         private AnimationController animationController;
-
-
+    
         public int CurrentHealth
         {
             get => currentHealth;
@@ -64,6 +62,9 @@ namespace ____.Entities.Player
 
         private List<Keys> movementKeys = new List<Keys> { Keys.W, Keys.S, Keys.A, Keys.D };
 
+        #endregion
+
+        #region Constructor and content loading
         public PlayerEntity(StatScaling statScaling = null)
             : base(new(-25, -25), 100f, new(50, 50), 100, Color.Black)
         {
@@ -130,6 +131,7 @@ namespace ____.Entities.Player
             // Start with down animation
             animationController.Play("walk_down");
         }
+        #endregion
 
         public override void Update(GameTime gameTime)
         {
@@ -181,8 +183,10 @@ namespace ____.Entities.Player
             
         }
 
+        #region Movement, Regeneration, Cooldown, and Animation Handling
         private void HandleMovement(GameTime gameTime)
         {
+            #region Handle input
             Vector2 inputDirection = Vector2.Zero;
 
             if (InputSystem.IsKeyDown(movementKeys[(int)MovementKeys.Up]))
@@ -201,9 +205,12 @@ namespace ____.Entities.Player
             {
                 inputDirection.X += 1;
             }
-
+            #endregion
+            
+            #region Determine direction and state based on input
             if (inputDirection != Vector2.Zero)
             {
+                #region Determine direction based on input
                 if (inputDirection.X == 0 && inputDirection.Y < 0)
                     currentDirection = PlayerDirection.Up;
                 else if (inputDirection.X == 0 && inputDirection.Y > 0)
@@ -220,6 +227,7 @@ namespace ____.Entities.Player
                     currentDirection = PlayerDirection.DownLeft;
                 else if (inputDirection.X > 0 && inputDirection.Y > 0)
                     currentDirection = PlayerDirection.DownRight;
+                #endregion
 
                 inputDirection.Normalize();
                 if (((InputSystem.IsKeyDown(Keys.Space) && skills.CanDash) || skills.activeDash) && currentStaminaBar >= 30f)
@@ -262,7 +270,9 @@ namespace ____.Entities.Player
                     currentState = PlayerState.Idle;
                 }
             }
+            #endregion
             
+            #region Collision detection and response
             Vector2 newPosition = position + velocity * (float)gameTime.ElapsedGameTime.TotalSeconds;
 
             Rectangle checkHitbox = new Rectangle((int)newPosition.X, (int)newPosition.Y, hitbox.Width, hitbox.Height);
@@ -297,14 +307,18 @@ namespace ____.Entities.Player
                     }
                 }
             }
+            #endregion
 
+            #region clamp position to map boundaries
             // Clamp position to map boundaries (after movement)
             position.X = Math.Clamp(position.X, Map.CurrentMap.Rec.Left, Map.CurrentMap.Rec.Right - hitbox.Width);
             position.Y = Math.Clamp(position.Y, Map.CurrentMap.Rec.Top, Map.CurrentMap.Rec.Bottom - hitbox.Height);
 
             hitbox.Location = position.ToPoint();
+            #endregion
         }
 
+        #region Regeneration and Cooldown Handling
         private void HandleRegeneration(GameTime gameTime)
         {
             float deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
@@ -372,7 +386,9 @@ namespace ____.Entities.Player
                     runColdownTimer = 0f;
             }
         }
+        #endregion
 
+        #region Animation Handling
         private void UpdateAnimation()
         {
             // Play the appropriate animation based on direction
@@ -406,7 +422,10 @@ namespace ____.Entities.Player
                 animationController.GetCurrentAnimation().Reset();
             }
         }
+        #endregion
+        #endregion
 
+        #region Combat and Damage Handling
         public void TakeDamage(int damage)
         {
             // Apply damage reduction
@@ -445,13 +464,17 @@ namespace ____.Entities.Player
             // Handle player death
             currentState = PlayerState.Dead;
         }
+        #endregion
 
+        #region Getters for stats, attributes, and skills
         // Public accessors for UI/debugging
         public PlayerStats GetStats() => stats;
         public PlayerAttributes GetAttributes() => attributes;
         public PlayerSkills GetSkills() => skills;
+        #endregion
     }
 
+    #region Supporting Enums and Structs
     public enum PlayerState
     {
         Idle,
@@ -506,4 +529,5 @@ namespace ____.Entities.Player
         Left,
         Right
     }
+    #endregion
 }
