@@ -34,11 +34,11 @@ namespace ____.World
             this.height = height;
             this.tileWidth = tileWidth;
             this.tileHeight = tileHeight;
-            this.position = new Vector2(
+            this.position = new(
                 -(width * tileWidth) / 2f,
                 -(height * tileHeight) / 2f
             );
-            Rec = new Rectangle(position.ToPoint(), new Point(width * tileWidth, height * tileHeight));
+            Rec = new(position.ToPoint(), new(width * tileWidth, height * tileHeight));
 
             tiles = new Tile[width, height];
             InitializeMap();
@@ -117,9 +117,9 @@ namespace ____.World
             
             // Get screen corners
             Vector2 topLeft = Vector2.Transform(Vector2.Zero, inverseTransform);
-            Vector2 topRight = Vector2.Transform(new Vector2(graphicsDevice.Viewport.Width, 0), inverseTransform);
-            Vector2 bottomLeft = Vector2.Transform(new Vector2(0, graphicsDevice.Viewport.Height), inverseTransform);
-            Vector2 bottomRight = Vector2.Transform(new Vector2(graphicsDevice.Viewport.Width, graphicsDevice.Viewport.Height), inverseTransform);
+            Vector2 topRight = Vector2.Transform(new(graphicsDevice.Viewport.Width, 0), inverseTransform);
+            Vector2 bottomLeft = Vector2.Transform(new(0, graphicsDevice.Viewport.Height), inverseTransform);
+            Vector2 bottomRight = Vector2.Transform(new(graphicsDevice.Viewport.Width, graphicsDevice.Viewport.Height), inverseTransform);
 
             // Find min/max bounds
             float minX = Math.Min(Math.Min(topLeft.X, topRight.X), Math.Min(bottomLeft.X, bottomRight.X));
@@ -127,7 +127,7 @@ namespace ____.World
             float minY = Math.Min(Math.Min(topLeft.Y, topRight.Y), Math.Min(bottomLeft.Y, bottomRight.Y));
             float maxY = Math.Max(Math.Max(topLeft.Y, topRight.Y), Math.Max(bottomLeft.Y, bottomRight.Y));
 
-            return new Rectangle((int)minX, (int)minY, (int)(maxX - minX), (int)(maxY - minY));
+            return new((int)minX, (int)minY, (int)(maxX - minX), (int)(maxY - minY));
         }
 
         public Vector2 TileToWorld(int tileX, int tileY)
@@ -137,7 +137,7 @@ namespace ____.World
 
         public Point WorldToTile(Vector2 worldPosition)
         {
-            return new Point(
+            return new(
                 (int)Math.Floor((worldPosition.X - position.X) / tileWidth),
                 (int)Math.Floor((worldPosition.Y - position.Y) / tileHeight)
             );
@@ -146,8 +146,8 @@ namespace ____.World
         public bool IsWalkable(Rectangle rect)
         {
             // Convert the rectangle to tile coordinates
-            Point topLeft = WorldToTile(new Vector2(rect.Left, rect.Top));
-            Point bottomRight = WorldToTile(new Vector2(rect.Right - 1, rect.Bottom - 1)); // Subtract 1 to avoid off-by-one errors
+            Point topLeft = WorldToTile(new(rect.Left, rect.Top));
+            Point bottomRight = WorldToTile(new(rect.Right - 1, rect.Bottom - 1)); // Subtract 1 to avoid off-by-one errors
 
             // Check all tiles that the rectangle covers
             for (int x = topLeft.X; x <= bottomRight.X; x++)

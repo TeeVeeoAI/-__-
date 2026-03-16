@@ -61,7 +61,7 @@ namespace ____.Systems.Animations
 
         public Rectangle GetSourceRectangle()
         {
-            return new Rectangle(
+            return new(
                 CurrentFrame * FrameWidth,
                 row * FrameHeight,
                 FrameWidth,

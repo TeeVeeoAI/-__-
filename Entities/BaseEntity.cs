@@ -32,7 +32,7 @@ namespace ____.Entities
         {
             this.position = position;
             this.speed = speed;
-            this.hitbox = new Rectangle((int)position.X, (int)position.Y, (int)heightAndWidth.X, (int)heightAndWidth.Y);
+            this.hitbox = new((int)position.X, (int)position.Y, (int)heightAndWidth.X, (int)heightAndWidth.Y);
             this.hp = hp;
             this.color = color ?? Color.White;
             this.velocity = Vector2.Zero;

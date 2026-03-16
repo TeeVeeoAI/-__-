@@ -51,7 +51,7 @@ namespace ____.Entities.Player
             set => currentStaminaBar = Math.Clamp(value, 0f, stats.MaxStaminaBar);
         }
 
-        private PlayerInventory inventory = new PlayerInventory(10);
+        private PlayerInventory inventory = new(10);
         private PlayerAttributes attributes;
         private PlayerSkills skills;
 
@@ -82,9 +82,9 @@ namespace ____.Entities.Player
             // Calculate speed based on stats and scaling
             speed = scaling.BaseSpeed * (1 + stats.Agility * scaling.SpeedPerAgility);
 
-            attributes = new PlayerAttributes
+            attributes = new()
             {
-                MovementSpeed = new MovementSpeed
+                MovementSpeed = new()
                 {
                     WalkSpeed = speed,
                     RunSpeed = speed * scaling.RunSpeedMultiplier,
@@ -264,7 +264,7 @@ namespace ____.Entities.Player
             else
             {
                 velocity *= friction;
-                if (velocity.Length() < 0.1f)
+                if (velocity.Length() < 1f)
                 {
                     velocity = Vector2.Zero;
                     currentState = PlayerState.Idle;

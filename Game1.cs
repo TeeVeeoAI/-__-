@@ -11,7 +11,7 @@ public class Game1 : Game
     private SpriteBatch _spriteBatch;
     private GameState currentGameState;
     private Color bgColor = Color.CornflowerBlue;
-    public static Point screenSize = new Point(1920, 1080);
+    public static Point screenSize = new(1920, 1080);
 
     public Game1()
     {
@@ -45,7 +45,7 @@ public class Game1 : Game
 
     protected override void Update(GameTime gameTime)
     {
-        if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
+        if (Keyboard.GetState().IsKeyDown(Keys.Escape))
             Exit();
 
         currentGameState.Update(gameTime);
