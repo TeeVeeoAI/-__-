@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using ____.Camera;
 using ____.Entities.Player;
 using ____.Systems;
