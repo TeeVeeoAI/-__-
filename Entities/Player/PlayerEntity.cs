@@ -472,6 +472,8 @@ namespace ____.Entities.Player
         public PlayerAttributes GetAttributes() => attributes;
         public PlayerSkills GetSkills() => skills;
         #endregion
+
+        public static PlayerEntity Instance { get; private set; }
     }
 
     #region Supporting Enums and Structs

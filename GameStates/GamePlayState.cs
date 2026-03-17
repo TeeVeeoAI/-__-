@@ -1,6 +1,9 @@
+using System.Collections.Generic;
 using ____.Camera;
+using ____.Entities.Enemies;
 using ____.Entities.Player;
 using ____.Systems;
+using ____.Systems.EnemySpawnSystem;
 using ____.World;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
@@ -13,6 +16,8 @@ namespace ____.GameStates
     {
         private Camera2D camera;
         private PlayerEntity player;
+        private List<BaseEnemyEntity> enemies;
+        private EnemySpawnSystem enemySpawnSystem;
         private FpsCounter fpsCounter;
         private GamePlaySubState currentSubState;
         private Map map;
@@ -25,11 +30,13 @@ namespace ____.GameStates
             fpsCounter = new();
             currentSubState = GamePlaySubState.LoadingMap;
             map = Map.Load();
+            player = new();
+            enemies = new List<BaseEnemyEntity>();
+            enemySpawnSystem = new();
         }
         public override void LoadContent()
         {
             font = contentManager.Load<SpriteFont>("Fonts/DefaultFont");
-            player = new();
             player.LoadContent(contentManager);
             map.LoadContent(contentManager);
             camera.LoadContent(contentManager, map.Rec);
@@ -41,6 +48,10 @@ namespace ____.GameStates
             if (currentSubState == GamePlaySubState.Normal)
             {
                 player.Update(gameTime);
+                //enemySpawnSystem.Update(gameTime, enemies, camera, map);
+                foreach (var enemy in enemies)                {
+                    enemy.Update(gameTime);
+                }
             }
             else if (currentSubState == GamePlaySubState.Inventory)
             {
@@ -69,6 +80,12 @@ namespace ____.GameStates
 
             map.Draw(spriteBatch, camera, graphicsDevice);
             
+
+            foreach (var enemy in enemies)
+            {
+                enemy.Draw(gameTime, spriteBatch);
+            }
+
             player.Draw(gameTime, spriteBatch);
 
             spriteBatch.End();

@@ -1,3 +1,4 @@
+using ____.Entities.Player;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -13,7 +14,7 @@ namespace ____.Entities.Enemies
             this.damage = damage;
         }
 
-        public override void Update(GameTime gameTime)
+        public override void Update(GameTime gameTime) 
         {
 
         }
