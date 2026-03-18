@@ -52,5 +52,11 @@ namespace ____.Entities
         {
             spriteBatch.Draw(texture, hitbox, color);
         }
+        
+        public virtual void SetPosition(Vector2 newPosition)
+        {
+            position = newPosition;
+            hitbox.Location = position.ToPoint();
+        }
     }
 }

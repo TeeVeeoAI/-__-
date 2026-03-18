@@ -33,6 +33,7 @@ namespace ____.GameStates
             player = new();
             enemies = new List<BaseEnemyEntity>();
             enemySpawnSystem = new();
+            enemySpawnSystem.AddEnemyType(() => new Minion(10), weight: 10);
         }
         public override void LoadContent()
         {
@@ -48,8 +49,9 @@ namespace ____.GameStates
             if (currentSubState == GamePlaySubState.Normal)
             {
                 player.Update(gameTime);
-                //enemySpawnSystem.Update(gameTime, enemies, camera, map);
-                foreach (var enemy in enemies)                {
+                enemySpawnSystem.Update(gameTime, enemies, camera, map);
+                foreach (var enemy in enemies)
+                {
                     enemy.Update(gameTime);
                 }
             }

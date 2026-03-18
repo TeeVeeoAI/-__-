@@ -105,6 +105,7 @@ namespace ____.Entities.Player
             };
 
             animationController = new();
+            instance = this;
         }
 
         public override void LoadContent(ContentManager contentManager)
@@ -473,7 +474,13 @@ namespace ____.Entities.Player
         public PlayerSkills GetSkills() => skills;
         #endregion
 
-        public static PlayerEntity Instance { get; private set; }
+        static PlayerEntity instance;
+        public static PlayerEntity Instance {
+            get
+            {
+                return instance;
+            } 
+        }
     }
 
     #region Supporting Enums and Structs

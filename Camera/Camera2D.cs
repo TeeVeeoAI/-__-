@@ -71,6 +71,20 @@ namespace ____.Camera
             pos.X = Math.Clamp(pos.X, mapBounds.Left + viewportWidth * 0.5f, mapBounds.Right - viewportWidth * 0.5f);
             pos.Y = Math.Clamp(pos.Y, mapBounds.Top + viewportHeight * 0.5f, mapBounds.Bottom - viewportHeight * 0.5f);
         }
+
+        public Rectangle GetViewBounds()
+        {
+            float viewportWidth = graphicsDevice.Viewport.Width / zoom;
+            float viewportHeight = graphicsDevice.Viewport.Height / zoom;
+
+            return new Rectangle(
+                (int)(pos.X - viewportWidth * 0.5f),
+                (int)(pos.Y - viewportHeight * 0.5f),
+                (int)viewportWidth,
+                (int)viewportHeight
+            );
+        }
+
         public Vector2 Pos
         {
             get { return pos; }
