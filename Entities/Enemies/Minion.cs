@@ -13,6 +13,7 @@ namespace ____.Entities.Enemies
         private int flightHeight;
         private Rectangle DrawHitbox;
         private MinionState currentState;
+        private MinionDirection currentDirection;
 
         public Minion(int flightHeight) : base(new(0, 0), 50, new(32, 32), 5, 20, Color.DarkBlue)
         {
@@ -25,22 +26,22 @@ namespace ____.Entities.Enemies
             
             velocity.Normalize();
 
-            if (inputDirection.X == 0 && inputDirection.Y < 0)
-                currentDirection = PlayerDirection.Up;
-            else if (inputDirection.X == 0 && inputDirection.Y > 0)
-                currentDirection = PlayerDirection.Down;
-            else if (inputDirection.X < 0 && inputDirection.Y == 0)
-                currentDirection = PlayerDirection.Left;
-            else if (inputDirection.X > 0 && inputDirection.Y == 0)
-                currentDirection = PlayerDirection.Right;
-            else if (inputDirection.X < 0 && inputDirection.Y < 0)
-                currentDirection = PlayerDirection.UpLeft;
-            else if (inputDirection.X > 0 && inputDirection.Y < 0)
-                currentDirection = PlayerDirection.UpRight;
-            else if (inputDirection.X < 0 && inputDirection.Y > 0)
-                currentDirection = PlayerDirection.DownLeft;
-            else if (inputDirection.X > 0 && inputDirection.Y > 0)
-                currentDirection = PlayerDirection.DownRight;
+            if (velocity.X == 0 && velocity.Y < 0)
+                currentDirection = MinionDirection.Up;
+            else if (velocity.X == 0 && velocity.Y > 0)
+                currentDirection = MinionDirection.Down;
+            else if (velocity.X < 0 && velocity.Y == 0)
+                currentDirection = MinionDirection.Left;
+            else if (velocity.X > 0 && velocity.Y == 0)
+                currentDirection = MinionDirection.Right;
+            else if (velocity.X < 0 && velocity.Y < 0)
+                currentDirection = MinionDirection.UpLeft;
+            else if (velocity.X > 0 && velocity.Y < 0)
+                currentDirection = MinionDirection.UpRight;
+            else if (velocity.X < 0 && velocity.Y > 0)
+                currentDirection = MinionDirection.DownLeft;
+            else if (velocity.X > 0 && velocity.Y > 0)
+                currentDirection = MinionDirection.DownRight;
 
             Vector2 newPosition = position + velocity * speed * dt;
 
@@ -102,5 +103,16 @@ namespace ____.Entities.Enemies
         Flighting,
         Attacking,
         Dead
+    }
+    public enum MinionDirection
+    {
+        Up,
+        Down,
+        Left,
+        Right,
+        UpLeft,
+        UpRight,
+        DownLeft,
+        DownRight
     }
 }
