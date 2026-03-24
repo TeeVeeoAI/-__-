@@ -16,7 +16,7 @@ namespace ____.Entities.Enemies
         private MinionState currentState;
         private MinionDirection currentDirection;
 
-        public Minion(int flightHeight) : base(new(0, 0), 100, new(32, 32), 5, 20, Color.DarkBlue)
+        public Minion(int flightHeight) : base(new(0, 0), 100, new(32, 32), 20, 20, Color.DarkBlue)
         {
             this.flightHeight = flightHeight;
             this.DrawHitbox = new Rectangle((int)position.X-flightHeight, (int)position.Y-flightHeight, hitbox.Width, hitbox.Height);
@@ -24,6 +24,8 @@ namespace ____.Entities.Enemies
 
         public override void Update(GameTime gameTime)
         {
+            base.Update(gameTime);
+
             float dt = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
             PlayerEntity player = PlayerEntity.Instance;

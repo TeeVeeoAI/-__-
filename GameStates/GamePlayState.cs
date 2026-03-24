@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using ____.Camera;
 using ____.Entities.Enemies;
 using ____.Entities.Player;
@@ -50,6 +52,7 @@ namespace ____.GameStates
             {
                 player.Update(gameTime);
                 enemySpawnSystem.Update(gameTime, enemies, camera, map);
+                CollisionDetection(gameTime);
                 foreach (var enemy in enemies)
                 {
                     enemy.Update(gameTime);
@@ -74,6 +77,25 @@ namespace ____.GameStates
 
             fpsCounter.Update(gameTime);
         }
+
+        public void CollisionDetection(GameTime gameTime)
+        {
+            if (enemies.Count == 0) return;
+            for (int i = enemies.Count - 1; i >= 0; i--)
+            {
+                var enemy = enemies[i];
+                if (DetectionNative.aabb_overlaps(DetectionNative.ToNativeRect(player.Hitbox), DetectionNative.ToNativeRect(enemy.Hitbox)) == 1)
+                {
+                    // Enemy attempts to attack player's entity on contact with a cooldown
+                    if (enemy.TryAttack(player))
+                    {
+                        // Optionally do anything when enemy lands an attack, e.g. change state
+                        // enemy.SetState? (if you add state transitions).
+                    }
+                }
+            }
+        }
+
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             base.Draw(gameTime, spriteBatch);
