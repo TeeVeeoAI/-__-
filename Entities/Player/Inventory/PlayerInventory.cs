@@ -43,16 +43,31 @@ namespace ____.Player.Inventory
         {
             spriteBatch.Draw(
                 texture, 
-                new Rectangle(Game1.screenSize.X/2 - Game1.screenSize.X/4, Game1.screenSize.Y/2- Game1.screenSize.Y/4, Game1.screenSize.X/2, Game1.screenSize.Y/2), 
+                new Rectangle(Game1.screenSize.X/2 - Game1.screenSize.X/3, Game1.screenSize.Y/2- Game1.screenSize.Y/3, (int)(Game1.screenSize.X/1.5), (int)(Game1.screenSize.Y/1.5)), 
                 new Color(30,30,30,100)
             );
+            int x = 0;
+            int y = 0;
             for(int i = 0; i < capacity; i++)
             {
+
                 spriteBatch.Draw(
                     texture,
-                    new Rectangle((Game1.screenSize.X/2 - Game1.screenSize.X/4)/(capacity/4), (Game1.screenSize.Y/2- Game1.screenSize.Y/4)/4, Game1.screenSize.X/2, Game1.screenSize.Y/2),
-                    new Color(50, 50, 50, 125)
+                    new Rectangle(
+                        Game1.screenSize.X/2 - Game1.screenSize.X/3 + x * (int)((Game1.screenSize.X/1.5) / (capacity/4)) , 
+                        Game1.screenSize.Y/2 - Game1.screenSize.Y/3 + y * (int)((Game1.screenSize.Y/1.5) / (capacity/4)), 
+                        (int)(Game1.screenSize.X/1.5) / (capacity/4), 
+                        (int)(Game1.screenSize.Y/1.5) / (capacity/4)
+                    ),
+                    new Color(200,200,200,100)
                 );
+
+                x++;
+                if (x >= 4)
+                {
+                    x = 0;
+                    y++;
+                }
             }
         }
     }

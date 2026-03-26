@@ -110,7 +110,8 @@ namespace ____.Entities.Enemies
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             float time = (float)gameTime.TotalGameTime.TotalSeconds;
-            float oscillation = flightHeight + (float)Math.Sin(time) * 5; // Oscillate with a frequency of 3 and amplitude of 5
+            float oscillation = flightHeight + (float)Math.Sin(time) * 5; // Oscillate between flightHeight - 5 and flightHeight + 5
+            DrawHitbox.Location = new Point((int)position.X - flightHeight, (int)position.Y - flightHeight);
             DrawHitbox.Y -= (int)oscillation; // Oscillate up and down
 
             color.A = (byte)(20 - (int)(0.5*oscillation)); // Make the hitbox semi-transparent
