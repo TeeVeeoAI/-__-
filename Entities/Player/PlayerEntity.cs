@@ -69,10 +69,10 @@ namespace ____.Entities.Player
             : base(new(-25, -25), 100f, new(50, 50), 100, Color.Black)
         {
             // Initialize scaling config 
-            scaling = statScaling ?? new StatScaling();
+            scaling = statScaling ?? new();
 
             // Initialize stats with scaling reference
-            stats = new PlayerStats(scaling);
+            stats = new(scaling);
 
             // Set current health/mana to max
             currentHealth = stats.MaxHealth;
@@ -146,7 +146,7 @@ namespace ____.Entities.Player
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
         {
             //base.Draw(gameTime, spriteBatch);
-            // Additional player-specific drawing (e.g., animations) can go here
+            //Additional player-specific drawing (e.g., animations) can go here
             animationController.Draw(spriteBatch, position - hitbox.Size.ToVector2()/5, Color.White, SpriteEffects.None, 2f);
             //spriteBatch.Draw(texture, hitbox, Color.Red * 0.5f); // Draw hitbox for debugging
         }
@@ -184,25 +184,29 @@ namespace ____.Entities.Player
             
         }
 
-        #region Movement, Regeneration, Cooldown, and Animation Handling
+        #region Movement, Regeneration, Cooldown, Animation Handling
+        private void HandleInputExceptMovement(GameTime gameTime)
+        {
+            
+        }
         private void HandleMovement(GameTime gameTime)
         {
             #region Handle input
             Vector2 inputDirection = Vector2.Zero;
 
-            if (InputSystem.IsKeyDown(movementKeys[(int)MovementKeys.Up]))
+            if (InputSystem.IsKeyDown(movementKeys[(int)MovementKeysdir.Up]))
             {
                 inputDirection.Y -= 1;
             }
-            if (InputSystem.IsKeyDown(movementKeys[(int)MovementKeys.Down]))
+            if (InputSystem.IsKeyDown(movementKeys[(int)MovementKeysdir.Down]))
             {
                 inputDirection.Y += 1;
             }
-            if (InputSystem.IsKeyDown(movementKeys[(int)MovementKeys.Left]))
+            if (InputSystem.IsKeyDown(movementKeys[(int)MovementKeysdir.Left]))
             {
                 inputDirection.X -= 1;
             }
-            if (InputSystem.IsKeyDown(movementKeys[(int)MovementKeys.Right]))
+            if (InputSystem.IsKeyDown(movementKeys[(int)MovementKeysdir.Right]))
             {
                 inputDirection.X += 1;
             }
@@ -531,7 +535,7 @@ namespace ____.Entities.Player
         public float FireballCooldown;
     }
 
-    public enum MovementKeys
+    public enum MovementKeysdir
     {
         Up,
         Down,

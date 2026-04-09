@@ -1,0 +1,15 @@
+{
+    "keybinds": {
+        "movementKeys": {
+            "up": "W",
+            "down": "S",
+            "left": "A",
+            "right": "D",
+            "sprint": "LeftShift",
+            "Dash": "Space"
+        },
+        "CombatKeys": {
+            "attack": "LeftMouse"
+        }
+    }
+}
