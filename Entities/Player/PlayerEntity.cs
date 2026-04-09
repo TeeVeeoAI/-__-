@@ -59,8 +59,7 @@ namespace ____.Entities.Player
         {
             get => inventory;
         }
-
-        private List<Keys> movementKeys = new List<Keys> { Keys.W, Keys.S, Keys.A, Keys.D };
+        private KeyBinds keyBinds;
 
         #endregion
 
@@ -70,6 +69,8 @@ namespace ____.Entities.Player
         {
             // Initialize scaling config 
             scaling = statScaling ?? new();
+
+            keyBinds = KeyBindsLoader.Load();
 
             // Initialize stats with scaling reference
             stats = new(scaling);
@@ -194,19 +195,19 @@ namespace ____.Entities.Player
             #region Handle input
             Vector2 inputDirection = Vector2.Zero;
 
-            if (InputSystem.IsKeyDown(movementKeys[(int)MovementKeysdir.Up]))
+            if (InputSystem.IsKeyDown(keyBinds.Movement.Up))
             {
                 inputDirection.Y -= 1;
             }
-            if (InputSystem.IsKeyDown(movementKeys[(int)MovementKeysdir.Down]))
+            if (InputSystem.IsKeyDown(keyBinds.Movement.Down))
             {
                 inputDirection.Y += 1;
             }
-            if (InputSystem.IsKeyDown(movementKeys[(int)MovementKeysdir.Left]))
+            if (InputSystem.IsKeyDown(keyBinds.Movement.Left))
             {
                 inputDirection.X -= 1;
             }
-            if (InputSystem.IsKeyDown(movementKeys[(int)MovementKeysdir.Right]))
+            if (InputSystem.IsKeyDown(keyBinds.Movement.Right))
             {
                 inputDirection.X += 1;
             }
@@ -533,14 +534,6 @@ namespace ____.Entities.Player
         public float activeDashTimer;
         public bool HasFireball;
         public float FireballCooldown;
-    }
-
-    public enum MovementKeysdir
-    {
-        Up,
-        Down,
-        Left,
-        Right
     }
     #endregion
 }
