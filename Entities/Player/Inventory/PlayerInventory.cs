@@ -10,9 +10,9 @@ namespace ____.Player.Inventory
 {
     public class PlayerInventory
     {
-        private List<InventorySlot> slots;
+        private InventorySlot[] slots; // Using an array for fixed size inventory, can be changed to List<InventorySlot> if dynamic resizing is needed
         private int capacity;
-        public List<InventorySlot> AllSlots
+        public InventorySlot[] AllSlots
         {
             get => slots;
         }
@@ -24,11 +24,7 @@ namespace ____.Player.Inventory
         public PlayerInventory(int size)
         {
             capacity = size;
-            slots = new List<InventorySlot>(capacity);
-            for (int i = 0; i < capacity; i++)
-            {
-                slots.Add(new InventorySlot());
-            }
+            slots = new InventorySlot[capacity];
         }
         public InventorySlot GetSlot(int index)
         {

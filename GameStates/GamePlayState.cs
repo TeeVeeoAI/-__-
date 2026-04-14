@@ -33,7 +33,7 @@ namespace ____.GameStates
             currentSubState = GamePlaySubState.LoadingMap;
             map = Map.Load();
             player = new();
-            enemies = new List<BaseEnemyEntity>();
+            enemies = new();
             enemySpawnSystem = new();
             enemySpawnSystem.AddEnemyType(() => new Minion(10), weight: 10);
         }

@@ -33,7 +33,8 @@ namespace ____.Entities.Player
             Down = down;
             Left = left;
             Right = right;
-
+            Sprint = sprint;
+            Dash = dash;
         }
     }
 
@@ -78,19 +79,21 @@ namespace ____.Entities.Player
         public static KeyBinds GetDefault()
         {
             return new KeyBinds
-            {
-                Movement = new MovementKeys
-                {
-                    Up = Keys.W,
-                    Down = Keys.S,
-                    Left = Keys.A,
-                    Right = Keys.D
-                },
-                Combat = new CombatKeys
-                {
-                    Attack = Keys.Space
-                }
-            };
+            (
+                new MovementKeys
+                (
+                    Keys.W,
+                    Keys.S,
+                    Keys.A,
+                    Keys.D,
+                    Keys.LeftShift,
+                    Keys.Space
+                ),
+                new CombatKeys
+                (
+                    Keys.L
+                )
+            );
         }
     }
 }
