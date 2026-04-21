@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
@@ -27,6 +28,7 @@ namespace ____.GameStates
         public GamePlayState(Game1 game, GraphicsDevice graphics, ContentManager content)
             : base(game, graphics, content)
         {
+            
             BGcolor = Color.Green;
             camera = new(graphicsDevice);
             fpsCounter = new();

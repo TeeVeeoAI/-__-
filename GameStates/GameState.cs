@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using ____.Systems;
+using System;
 
 namespace ____.GameStates
 {
@@ -18,6 +19,7 @@ namespace ____.GameStates
 
         public GameState(Game1 game, GraphicsDevice graphics, ContentManager content)
         {
+            Console.WriteLine("GamePlayState initialized.");
             game1 = game;
             graphicsDevice = graphics;
             contentManager = content;
