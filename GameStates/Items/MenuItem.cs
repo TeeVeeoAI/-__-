@@ -26,7 +26,7 @@ namespace ____.GameStates.Items
             Color drawColor = isSelected ? selectedColor : normalColor;
             Vector2 textSize = font.MeasureString(text);
             Vector2 position = new Vector2(
-                bounds.X + (bounds.Width - textSize.X) / 2,
+                bounds.X,
                 bounds.Y + (bounds.Height - textSize.Y) / 2
             );
             spriteBatch.DrawString(font, text, position, drawColor);
