@@ -8,7 +8,7 @@ namespace ____.GameStates
 {
     public class SettingsState : GameState
     {
-        private List<SettingsItem> settingsItems;
+        private List<SettingsItem> settingsItems; // Using a list for the same reason as in MenuState.
         public SettingsState(Game1 game, GraphicsDevice graphics, ContentManager content)
             : base(game, graphics, content)
         {

@@ -19,7 +19,7 @@ namespace ____.GameStates
     {
         private Camera2D camera;
         private PlayerEntity player;
-        private List<BaseEnemyEntity> enemies;
+        private List<BaseEnemyEntity> enemies; //Using a list for dynamic enemy management.
         private EnemySpawnSystem enemySpawnSystem;
         private FpsCounter fpsCounter;
         private GamePlaySubState currentSubState;

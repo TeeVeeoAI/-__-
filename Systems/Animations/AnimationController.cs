@@ -6,7 +6,7 @@ namespace ____.Systems.Animations
 {
     public class AnimationController
     {
-        private Dictionary<string, Animation> animations;
+        private Dictionary<string, Animation> animations; // Using a dictionary for easy lookup of animations by name
         private Animation currentAnimation;
         private string currentAnimationName;
 

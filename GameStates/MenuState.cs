@@ -10,7 +10,7 @@ namespace ____.GameStates
 {
     public class MenuState : GameState
     {
-        private List<MenuItem> menuItems;
+        private List<MenuItem> menuItems; // Usesing a list for dynamic menu item management, can be changed to array if fixed menu is desired
         private int selectedIndex;
         public MenuState(Game1 game, GraphicsDevice graphics, ContentManager content)
             : base(game, graphics, content)
