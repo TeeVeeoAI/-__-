@@ -60,15 +60,27 @@ namespace ____.Systems
         {
             return mstateNew.LeftButton == ButtonState.Pressed && mstateOld.LeftButton == ButtonState.Released;
         }
+        public static bool IsRightPressed()
+        {
+            return mstateNew.RightButton == ButtonState.Pressed && mstateOld.RightButton == ButtonState.Released;
+        }
 
         public static bool IsLeftReleased()
         {
             return mstateNew.LeftButton == ButtonState.Released && mstateOld.LeftButton == ButtonState.Pressed;
         }
+        public static bool IsRightReleased()
+        {
+            return mstateNew.RightButton == ButtonState.Released && mstateOld.RightButton == ButtonState.Pressed;
+        }
 
         public static bool IsLeftDown()
         {
             return mstateNew.LeftButton == ButtonState.Pressed;
+        }
+        public static bool IsRightDown()
+        {
+            return mstateNew.RightButton == ButtonState.Pressed;
         }
 
         public static Vector2 GetMousePosition()
@@ -101,6 +113,32 @@ namespace ____.Systems
         public static Keys[] GetPressedKeys()
         {
             return kstateNew.GetPressedKeys();
+        }
+
+        public static bool IsKeyPreesed(string key) 
+        // I spelled "Pressed" wrong, but i don't want to change it now because it would break other stuff.
+        // I have no idea if this is the best way to do this, 
+        // but i couldn't think of a better way to handle mouse buttons in the keybinds system.
+        {
+            if (key == "MouseLeft")
+                return IsLeftPressed();
+            if (key == "MouseRight")
+                return IsRightReleased();
+            else if (System.Enum.TryParse(key, out Keys k))
+                return IsKeyPressed(k);
+            return false;
+            
+        }
+
+        public static bool IsKeyDown(string key)
+        {
+            if (key == "MouseLeft")
+                return IsLeftDown();
+            if (key == "MouseRight")
+                return IsRightDown();
+            else if (System.Enum.TryParse(key, out Keys k))
+                return IsKeyDown(k);
+            return false;
         }
     }
 }

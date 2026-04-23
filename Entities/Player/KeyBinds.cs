@@ -21,13 +21,13 @@ namespace ____.Entities.Player
 
     public class MovementKeys
     {
-        public Keys Up { get; set; }
-        public Keys Down { get; set; }
-        public Keys Left { get; set; }
-        public Keys Right { get; set; }
-        public Keys Sprint { get; set; }
-        public Keys Dash { get; set; }
-        public MovementKeys(Keys up, Keys down, Keys left, Keys right, Keys sprint, Keys dash)
+        public string Up { get; set; }
+        public string Down { get; set; }
+        public string Left { get; set; }
+        public string Right { get; set; }
+        public string Sprint { get; set; }
+        public string Dash { get; set; }
+        public MovementKeys(string up, string down, string left, string right, string sprint, string dash)
         {
             Up = up;
             Down = down;
@@ -40,37 +40,10 @@ namespace ____.Entities.Player
 
     public class CombatKeys
     {
-        public Keys Attack { get; set; }
-        public CombatKeys(Keys attack)
+        public string Attack { get; set; }
+        public CombatKeys(string attack)
         {
             Attack = attack;
-        }
-    }
-
-    public class KeyBindsLoader
-    {
-        public static KeyBinds Load(string filePath = null)
-        {
-            string resolvedPath = ResolvePath(filePath);
-
-            if (!File.Exists(resolvedPath))
-            {
-                return DefaultKeyBinds.GetDefault();
-            }
-
-            string json = File.ReadAllText(resolvedPath);
-            KeyBinds fileData = JsonSerializer.Deserialize<KeyBinds>(json);
-
-            return fileData ?? DefaultKeyBinds.GetDefault();
-        }
-
-        private static string ResolvePath(string filePath)
-        {
-            string relativePath = string.IsNullOrWhiteSpace(filePath)
-                ? Path.Combine("SavedData", "Player", "KeyBinds.json")
-                : filePath;
-
-            return Path.GetFullPath(relativePath);
         }
     }
 
@@ -82,16 +55,16 @@ namespace ____.Entities.Player
             (
                 new MovementKeys
                 (
-                    Keys.W,
-                    Keys.S,
-                    Keys.A,
-                    Keys.D,
-                    Keys.LeftShift,
-                    Keys.Space
+                    Keys.W.ToString(),
+                    Keys.S.ToString(),
+                    Keys.A.ToString(),
+                    Keys.D.ToString(),
+                    Keys.LeftShift.ToString(),
+                    Keys.Space.ToString()
                 ),
                 new CombatKeys
                 (
-                    Keys.L
+                    "MouseLeft"
                 )
             );
         }

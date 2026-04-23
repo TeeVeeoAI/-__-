@@ -40,7 +40,6 @@ namespace ____.GameStates
                 item.Draw(spriteBatch, font);
             }
 
-            spriteBatch.Draw(pixel, new Rectangle(100, 150, 1, 500), Color.DarkBlue);
             spriteBatch.End();
         }
     }

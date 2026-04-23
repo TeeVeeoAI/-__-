@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using ____.Player.Inventory;
 using ____.Systems;
 using ____.Systems.Animations;
+using ____.Systems.LoadData.LoadPlayer;
+using ____.Systems.SaveData.SavePlayer;
 using ____.World;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
@@ -70,7 +72,7 @@ namespace ____.Entities.Player
             // Initialize scaling config 
             scaling = statScaling ?? new();
 
-            keyBinds = KeyBindsLoader.Load();
+            keyBinds = LoadKeybinds.Load();
 
             // Initialize stats with scaling reference
             stats = new(scaling);
@@ -236,7 +238,7 @@ namespace ____.Entities.Player
                 #endregion
 
                 inputDirection.Normalize();
-                if (((InputSystem.IsKeyDown(Keys.Space) && skills.CanDash) || skills.activeDash) && currentStaminaBar >= 30f)
+                if (((InputSystem.IsKeyPreesed(keyBinds.Movement.Dash) && skills.CanDash) || skills.activeDash) && currentStaminaBar >= 30f)
                 {
                     velocity = inputDirection * attributes.MovementSpeed.DashSpeed; // Dashing speed
                     currentState = PlayerState.Dashing;
@@ -249,7 +251,7 @@ namespace ____.Entities.Player
                         skills.activeDashTimer = 0.5f; // Dash lasts for 0.5 seconds
                     }
                 }
-                else if (InputSystem.IsKeyDown(Keys.LeftShift) && currentStaminaBar >= 0f && runColdownTimer <= 0f)
+                else if (InputSystem.IsKeyDown(keyBinds.Movement.Sprint) && currentStaminaBar >= 0f && runColdownTimer <= 0f)
                 {
                     velocity = inputDirection * attributes.MovementSpeed.RunSpeed;
 
