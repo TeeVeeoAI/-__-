@@ -28,5 +28,15 @@
   </ItemGroup>
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
     <Copy SourceFiles="detection\target\debug\detection.dll" DestinationFolder="$(OutDir)" />
+  </Target> 
+
+  <ItemGroup>
+    <SavedDataFiles Include="SavedData\**\*.*" />
+  </ItemGroup>
+  <Target Name="CopySavedData" AfterTargets="Build">
+    <Copy 
+      SourceFiles="@(SavedDataFiles)" 
+      DestinationFiles="@(SavedDataFiles->'$(OutDir)SavedData\%(RecursiveDir)%(Filename)%(Extension)')" 
+    />
   </Target>
 </Project>

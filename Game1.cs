@@ -1,4 +1,6 @@
 ﻿using ____.GameStates;
+using ____.Systems;
+using ____.Systems.LoadData.LoadSettings;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -12,17 +14,22 @@ public class Game1 : Game
     private GameState currentGameState;
     private Color bgColor = Color.CornflowerBlue;
     public static Point screenSize = new(1920, 1080);
+    private FpsCounter fpsCounter;
 
     public Game1()
     {
+        Settings settings = LoadSettings.Load();
         _graphics = new GraphicsDeviceManager(this);
         Content.RootDirectory = "Content";
         IsMouseVisible = true;
+        screenSize = settings.ScreenSize.ToPoint();
         _graphics.PreferredBackBufferWidth = screenSize.X;
         _graphics.PreferredBackBufferHeight = screenSize.Y;
-        _graphics.SynchronizeWithVerticalRetrace = false; //VSync
+        _graphics.SynchronizeWithVerticalRetrace = settings.VSync; //VSync
         IsFixedTimeStep = false; //Uncapped FPS
+        _graphics.IsFullScreen = settings.Fullscreen;
         _graphics.ApplyChanges();
+        fpsCounter = new();
     }
 
     protected override void Initialize()
@@ -51,7 +58,7 @@ public class Game1 : Game
         currentGameState.Update(gameTime);
 
         // TODO: Add your update logic here
-
+        fpsCounter.Update(gameTime);
         base.Update(gameTime);
     }
 
@@ -62,6 +69,9 @@ public class Game1 : Game
         // TODO: Add your drawing code here
 
         currentGameState.Draw(gameTime, _spriteBatch);
+        _spriteBatch.Begin();
+        fpsCounter.Draw(_spriteBatch, Content.Load<SpriteFont>("Fonts/DefaultFont"), new Vector2(10, 10), Color.White);
+        _spriteBatch.End();
 
         base.Draw(gameTime);
     }

@@ -21,7 +21,6 @@ namespace ____.GameStates
         private PlayerEntity player;
         private List<BaseEnemyEntity> enemies; //Using a list for dynamic enemy management.
         private EnemySpawnSystem enemySpawnSystem;
-        private FpsCounter fpsCounter;
         private GamePlaySubState currentSubState;
         private Map map;
 
@@ -31,7 +30,6 @@ namespace ____.GameStates
             
             BGcolor = Color.Green;
             camera = new(graphicsDevice);
-            fpsCounter = new();
             currentSubState = GamePlaySubState.LoadingMap;
             map = Map.Load();
             player = new();
@@ -77,7 +75,6 @@ namespace ____.GameStates
 
             camera.Pos = player.Position;
 
-            fpsCounter.Update(gameTime);
         }
 
         public void CollisionDetection(GameTime gameTime)
@@ -124,7 +121,6 @@ namespace ____.GameStates
             spriteBatch.Begin();
 
             player.DrawUI(spriteBatch, font, Color.White);
-            fpsCounter.Draw(spriteBatch, font, new Vector2(10, 10), Color.White);
 
             if (currentSubState == GamePlaySubState.Inventory)
             {
