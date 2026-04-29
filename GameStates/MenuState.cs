@@ -10,6 +10,13 @@ namespace ____.GameStates
 {
     public class MenuState : GameState
     {
+        private enum MenuAction
+        {
+            StartGame,
+            Settings,
+            Exit
+        }
+
         private List<MenuItem> menuItems; // Usesing a list for dynamic menu item management, can be changed to array if fixed menu is desired
         private int selectedIndex;
         public MenuState(Game1 game, GraphicsDevice graphics, ContentManager content)
@@ -55,15 +62,15 @@ namespace ____.GameStates
                     {
                         continue;
                     }
-                    switch (selectedIndex)
+                    switch ((MenuAction)selectedIndex)
                     {
-                        case 0:
+                        case MenuAction.StartGame:
                             game1.ChangeGameState(new GamePlayState(game1, graphicsDevice, contentManager));
                             break;
-                        case 1:
+                        case MenuAction.Settings:
                             game1.ChangeGameState(new SettingsState(game1, graphicsDevice, contentManager));
                             break;
-                        case 2:
+                        case MenuAction.Exit:
                             game1.Exit();
                             break;
                     }

@@ -1,6 +1,7 @@
 ﻿using ____.GameStates;
 using ____.Systems;
 using ____.Systems.LoadData.LoadSettings;
+using ____.Systems.SaveData.SaveSettings;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -13,21 +14,24 @@ public class Game1 : Game
     private SpriteBatch _spriteBatch;
     private GameState currentGameState;
     private Color bgColor = Color.CornflowerBlue;
+    private Settings currentSettings;
     public static Point screenSize = new(1920, 1080);
     private FpsCounter fpsCounter;
 
     public Game1()
     {
-        Settings settings = LoadSettings.Load();
+        currentSettings = LoadSettings.Load();
+
         _graphics = new GraphicsDeviceManager(this);
         Content.RootDirectory = "Content";
         IsMouseVisible = true;
-        screenSize = settings.ScreenSize.ToPoint();
+        
+        screenSize = currentSettings.ScreenSize.ToPoint();
         _graphics.PreferredBackBufferWidth = screenSize.X;
         _graphics.PreferredBackBufferHeight = screenSize.Y;
-        _graphics.SynchronizeWithVerticalRetrace = settings.VSync; //VSync
+        _graphics.SynchronizeWithVerticalRetrace = currentSettings.VSync; //VSync
         IsFixedTimeStep = false; //Uncapped FPS
-        _graphics.IsFullScreen = settings.Fullscreen;
+        _graphics.IsFullScreen = currentSettings.Fullscreen;
         _graphics.ApplyChanges();
         fpsCounter = new();
     }
@@ -85,6 +89,46 @@ public class Game1 : Game
     {
         currentGameState = newState;
         currentGameState.LoadContent();
+    }
+
+    public bool IsFullScreen => currentSettings?.Fullscreen ?? _graphics.IsFullScreen;
+    public bool IsVSync => currentSettings?.VSync ?? _graphics.SynchronizeWithVerticalRetrace;
+
+    public void ToggleFullscreen()
+    {
+        if (currentSettings == null)
+            return;
+
+        currentSettings.Fullscreen = !_graphics.IsFullScreen;
+        _graphics.IsFullScreen = currentSettings.Fullscreen;
+        _graphics.ApplyChanges();
+        SaveSettings.Save(currentSettings);
+    }
+
+    public void ToggleVSync()
+    {
+        if (currentSettings == null)
+            return;
+
+        currentSettings.VSync = !currentSettings.VSync;
+        _graphics.SynchronizeWithVerticalRetrace = currentSettings.VSync;
+        _graphics.ApplyChanges();
+        SaveSettings.Save(currentSettings);
+    }
+
+    public void ReloadSettings()
+    {
+        var loaded = LoadSettings.Load();
+        if (loaded == null)
+            return;
+
+        currentSettings = loaded;
+        screenSize = currentSettings.ScreenSize.ToPoint();
+        _graphics.PreferredBackBufferWidth = screenSize.X;
+        _graphics.PreferredBackBufferHeight = screenSize.Y;
+        _graphics.SynchronizeWithVerticalRetrace = currentSettings.VSync;
+        _graphics.IsFullScreen = currentSettings.Fullscreen;
+        _graphics.ApplyChanges();
     }
 
     static Game1 instance;

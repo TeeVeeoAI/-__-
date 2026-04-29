@@ -26,7 +26,8 @@ namespace ____.Systems.LoadData.LoadSettings
             }
 
             string json = File.ReadAllText(resolvedPath);
-            return JsonSerializer.Deserialize<Settings>(json);
+            var wrapper = JsonSerializer.Deserialize<SettingsFile>(json);
+            return wrapper.Settings;
         }
         
         private static string ResolvePath(string filePath)
@@ -36,6 +37,12 @@ namespace ____.Systems.LoadData.LoadSettings
                 : filePath;
             return Path.GetFullPath(relativePath);
         }
+    }
+
+    public class SettingsFile
+    {
+        [JsonPropertyName("Settings")]
+        public Settings Settings { get; set; }
     }
 
     public class Settings

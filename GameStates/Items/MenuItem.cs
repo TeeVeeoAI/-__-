@@ -11,7 +11,7 @@ namespace ____.GameStates.Items
         private Color normalColor = Color.White;
         private Color selectedColor = Color.Yellow;
 
-        public string Text { get => text; }
+        public string Text { get => text; set => text = value; }
         public bool IsSelected { get => isSelected; set => isSelected = value; }
         public Rectangle Bounds{ get => bounds; }
         public MenuItem(string text, Rectangle bounds)

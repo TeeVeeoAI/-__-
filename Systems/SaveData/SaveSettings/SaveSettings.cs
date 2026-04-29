@@ -21,7 +21,9 @@ namespace ____.Systems.SaveData.SaveSettings
                 Directory.CreateDirectory(directory);
             }
 
-            string json = JsonSerializer.Serialize(settings, new JsonSerializerOptions { WriteIndented = true });
+            var settingsFile = new SettingsFile { Settings = settings };
+
+            string json = JsonSerializer.Serialize(settingsFile, new JsonSerializerOptions { WriteIndented = true });
             File.WriteAllText(resolvedPath, json);
         }
         

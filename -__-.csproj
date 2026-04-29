@@ -34,9 +34,13 @@
     <SavedDataFiles Include="SavedData\**\*.*" />
   </ItemGroup>
   <Target Name="CopySavedData" AfterTargets="Build">
+    <ItemGroup>
+      <SavedDataFilesToCopy Include="@(SavedDataFiles)"
+          Condition="!Exists('$(OutDir)SavedData\%(RecursiveDir)%(Filename)%(Extension)')" />
+    </ItemGroup>
     <Copy 
-      SourceFiles="@(SavedDataFiles)" 
-      DestinationFiles="@(SavedDataFiles->'$(OutDir)SavedData\%(RecursiveDir)%(Filename)%(Extension)')" 
+      SourceFiles="@(SavedDataFilesToCopy)" 
+      DestinationFiles="@(SavedDataFilesToCopy->'$(OutDir)SavedData\%(RecursiveDir)%(Filename)%(Extension)')" 
     />
   </Target>
 </Project>

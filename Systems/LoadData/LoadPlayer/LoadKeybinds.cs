@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using ____.Entities.Player;
 
@@ -20,8 +21,10 @@ namespace ____.Systems.LoadData.LoadPlayer
             }
 
             string json = File.ReadAllText(resolvedPath);
-            KeyBinds fileData = JsonSerializer.Deserialize<KeyBinds>(json);
+            KeyBindsFile wrapper = JsonSerializer.Deserialize<KeyBindsFile>(json);
 
+            KeyBinds fileData = wrapper?.KeyBinds;
+            
             return fileData ?? DefaultKeyBinds.GetDefault();
         }
 
@@ -32,6 +35,12 @@ namespace ____.Systems.LoadData.LoadPlayer
                 : filePath;
 
             return Path.GetFullPath(relativePath);
+        }
+
+        public class KeyBindsFile
+        {
+            [JsonPropertyName("KeyBinds")]
+            public KeyBinds KeyBinds { get; set; }
         }
     }
 }
