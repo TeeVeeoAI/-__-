@@ -14,6 +14,7 @@ namespace ____.GameStates
         {
             ToggleFullscreen,
             ToggleVSync,
+            ToggleShowFps,
             ReloadSettings,
             Keybinds,
             MovementKeys,
@@ -31,11 +32,12 @@ namespace ____.GameStates
             settingsItems = new List<SettingsItem> {
                 new("Toggle Fullscreen", new (100, 150, 300, 50)),
                 new("Toggle VSync", new (100, 220, 300, 50)),
-                new("Reload Settings", new (100, 290, 300, 50)),
-                new("Keybinds", new (100, 360, 300, 50)),
-                new("Movement Keys", new (100, 430, 300, 50)),
-                new("Attack Keys", new (100, 500, 300, 50)),
-                new("Back", new (100, 570, 300, 50))
+                new("Toggle Show FPS", new (100, 290, 300, 50)),
+                new("Reload Settings", new (100, 360, 300, 50)),
+                new("Keybinds", new (100, 430, 300, 50)),
+                new("Movement Keys", new (100, 500, 300, 50)),
+                new("Attack Keys", new (100, 570, 300, 50)),
+                new("Back", new (100, 640, 300, 50))
             };
             selectedIndex = 0;
             settingsItems[selectedIndex].IsSelected = true;
@@ -82,6 +84,9 @@ namespace ____.GameStates
                         case SettingsAction.ReloadSettings:
                             game1.ReloadSettings();
                             break;
+                        case SettingsAction.ToggleShowFps:
+                            game1.ToggleShowFps();
+                            break;
                         case SettingsAction.Back:
                             game1.ChangeGameState(new MenuState(game1, graphicsDevice, contentManager));
                             return;
@@ -102,6 +107,7 @@ namespace ____.GameStates
             {
                 settingsItems[0].Text = $"Toggle Fullscreen ({(game1.IsFullScreen ? "On" : "Off")})";
                 settingsItems[1].Text = $"Toggle VSync ({(game1.IsVSync ? "On" : "Off")})";
+                settingsItems[2].Text = $"Toggle Show FPS ({(game1.ShowFps ? "On" : "Off")})";
             }
         }
 

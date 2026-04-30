@@ -15,7 +15,7 @@ public class Game1 : Game
     private GameState currentGameState;
     private Color bgColor = Color.CornflowerBlue;
     private Settings currentSettings;
-    public static Point screenSize = new(1920, 1080);
+    public static Point screenSize;
     private FpsCounter fpsCounter;
 
     public Game1()
@@ -33,7 +33,8 @@ public class Game1 : Game
         IsFixedTimeStep = false; //Uncapped FPS
         _graphics.IsFullScreen = currentSettings.Fullscreen;
         _graphics.ApplyChanges();
-        fpsCounter = new();
+        if (currentSettings.ShowFps)
+            fpsCounter = new();
     }
 
     protected override void Initialize()
@@ -62,7 +63,9 @@ public class Game1 : Game
         currentGameState.Update(gameTime);
 
         // TODO: Add your update logic here
-        fpsCounter.Update(gameTime);
+        if (ShowFps)
+            fpsCounter.Update(gameTime);
+        
         base.Update(gameTime);
     }
 
@@ -73,9 +76,11 @@ public class Game1 : Game
         // TODO: Add your drawing code here
 
         currentGameState.Draw(gameTime, _spriteBatch);
-        _spriteBatch.Begin();
-        fpsCounter.Draw(_spriteBatch, Content.Load<SpriteFont>("Fonts/DefaultFont"), new Vector2(10, 10), Color.White);
-        _spriteBatch.End();
+        if (ShowFps) {
+            _spriteBatch.Begin();
+            fpsCounter.Draw(_spriteBatch, Content.Load<SpriteFont>("Fonts/DefaultFont"), new Vector2(10, 10), Color.White);
+            _spriteBatch.End();
+        }
 
         base.Draw(gameTime);
     }
@@ -93,6 +98,7 @@ public class Game1 : Game
 
     public bool IsFullScreen => currentSettings?.Fullscreen ?? _graphics.IsFullScreen;
     public bool IsVSync => currentSettings?.VSync ?? _graphics.SynchronizeWithVerticalRetrace;
+    public bool ShowFps => currentSettings?.ShowFps ?? true;
 
     public void ToggleFullscreen()
     {
@@ -116,6 +122,17 @@ public class Game1 : Game
         SaveSettings.Save(currentSettings);
     }
 
+    public void ToggleShowFps()
+    {
+        if (currentSettings == null)
+            return;
+
+        currentSettings.ShowFps = !currentSettings.ShowFps;
+        if (currentSettings.ShowFps && fpsCounter == null)
+            fpsCounter = new();
+        SaveSettings.Save(currentSettings);
+    }
+
     public void ReloadSettings()
     {
         var loaded = LoadSettings.Load();
@@ -128,6 +145,7 @@ public class Game1 : Game
         _graphics.PreferredBackBufferHeight = screenSize.Y;
         _graphics.SynchronizeWithVerticalRetrace = currentSettings.VSync;
         _graphics.IsFullScreen = currentSettings.Fullscreen;
+        fpsCounter = currentSettings.ShowFps ? new() : null;
         _graphics.ApplyChanges();
     }
 

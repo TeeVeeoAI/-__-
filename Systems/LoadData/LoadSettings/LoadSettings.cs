@@ -21,7 +21,8 @@ namespace ____.Systems.LoadData.LoadSettings
                 {
                     ScreenSize = new ScreenSize { Width = 1920, Height = 1080 },
                     Fullscreen = false,
-                    VSync = false
+                    VSync = false,
+                    ShowFps = true
                 };
             }
 
@@ -53,6 +54,8 @@ namespace ____.Systems.LoadData.LoadSettings
         public bool Fullscreen { get; set; }
         [JsonPropertyName("VSync")]
         public bool VSync { get; set; }
+        [JsonPropertyName("ShowFps")]
+        public bool ShowFps { get; set; }
     }
 
     public class ScreenSize
